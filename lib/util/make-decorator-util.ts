@@ -90,7 +90,8 @@ export class MakeDecoratorUtil {
                     method: {
                         decorator: {
                             decoratorFactory: factory,
-                            metadata: metadataValue
+                            metadataValue,
+                            option
                         },
                         propertyKey
                     }
@@ -239,7 +240,8 @@ export class MakeDecoratorUtil {
                     property: {
                         decorator: {
                             decoratorFactory: factory,
-                            metadata: metadataValue
+                            metadataValue,
+                            option
                         },
                         propertyKey
                     }
@@ -277,7 +279,8 @@ export class MakeDecoratorUtil {
                     class: {
                         decorator: {
                             decoratorFactory: factory,
-                            metadata: metadataValue
+                            metadataValue,
+                            option
                         }
                     }
                 });
@@ -316,7 +319,8 @@ export class MakeDecoratorUtil {
                         parameter: {
                             decorator: {
                                 decoratorFactory: factory,
-                                metadata: metadataValue
+                                metadataValue,
+                                option
                             },
                             index: parameterIndex
                         },

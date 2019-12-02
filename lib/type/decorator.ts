@@ -17,6 +17,8 @@ export type Decorator<V = any, DF extends DecoratorFactory<V> = any> = {
     /**
      *
      */
-    metadata: V;
+    metadataValue: V;
+
+    option: any | undefined;
 }
 
