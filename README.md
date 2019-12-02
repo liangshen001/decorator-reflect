@@ -101,3 +101,13 @@ console.log(aClass);
 //             metadata: 'bbb' } ],
 //     type: [Function: String] } ] }
 ```
+
+### 当然typescript中的装饰器 是区别于 java中的注解的，装饰器可以在使用的时候就会去触发一段代码，使用DecoratorFactoryBuilder创建装饰器时允许您执行一段代码
+
+````typescript
+import {DecoratorFactoryBuilder} from "ts-decorator-reflect";
+import {ReflectUtil} from "ts-decorator-reflect";
+
+
+
+````

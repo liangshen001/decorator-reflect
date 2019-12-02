@@ -2,11 +2,8 @@ import {MethodHandler} from "../bean/method-handler";
 import {PropertyHandler} from "../bean/property-handler";
 import {ClassHandler} from "../bean/class-handler";
 import {ParameterHandler} from "../bean/parameter-handler";
-import {Property} from "../bean/property";
 import {Decorator} from "../type/decorator";
-import {Method} from "../type/method";
 import {Class} from "../type/class";
-import {A} from "../../src/test";
 
 export class MakeDecoratorUtil {
 

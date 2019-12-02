@@ -81,3 +81,28 @@ console.log(aClass);
 //                 [ { decoratorFactory: { [Function: factory] metadataKey: Symbol() },
 //             metadata: 'bbb' } ],
 //     type: [Function: String] } ] }
+
+const Test2 = DecoratorFactoryBuilder.create().class<void>(<TFunction extends Function>(option: void, target: TFunction, paramTypes: Function[]) => {
+    console.log(option);
+    console.log(target);
+    console.log(paramTypes);
+}).method<string>(<T> (option: string, target: Object, propertyKey: string, descriptor: TypedPropertyDescriptor<T>,
+                   paramTypes: Function[], returnType: Function) => {
+    console.log(option);
+    console.log(target);
+    console.log(propertyKey);
+    console.log(descriptor);
+    console.log(paramTypes);
+    console.log(returnType);
+}).build();
+
+
+@Test2()
+export class C {
+    constructor(a: string) {}
+
+    @Test2('test2')
+    test2(a: string): string {
+        return '';
+    }
+}
