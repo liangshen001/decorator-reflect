@@ -1,7 +1,7 @@
-import {Decorator} from "./decorator";
+import {DecoratorDefinition} from "./decoratorDefinition";
 
 
-export type Property = {
+export type PropertyDefinition = {
     /**
      * 属性类型
      */
@@ -11,7 +11,7 @@ export type Property = {
      */
     name: string | symbol;
 
-    decorators: Decorator[];
+    decorators: DecoratorDefinition[];
 
     isStatic: boolean;
 }

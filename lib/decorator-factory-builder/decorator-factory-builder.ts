@@ -11,31 +11,25 @@ import {MethodDecoratorFactoryBuilder} from './method/method-decorator-factory-b
 import {ClassDecoratorFactoryBuilder} from './class/class-decorator-factory-builder';
 import {PropertyDecoratorFactoryBuilder} from './property/property-decorator-factory-builder';
 
-class DecoratorFactoryBuilder<V> extends AbstractDecoratorFactoryBuilder<V, void> {
+class DecoratorFactoryBuilder<O> extends AbstractDecoratorFactoryBuilder<O> {
 
-    public static create<V = void>(metadataKey?: string | symbol): DecoratorFactoryBuilder<V> {
-        return new DecoratorFactoryBuilder<V>(metadataKey || Symbol());
+    public static create<O = void>(defaultOption?: O | ((o: O) => O), metadataKey?: string | symbol): DecoratorFactoryBuilder<O> {
+        return new DecoratorFactoryBuilder<O>(defaultOption, metadataKey || Symbol());
     }
 
-    public parameter<OPA = void>(
-        parameterHandler: ParameterHandler<V, OPA>
-    ): ParameterDecoratorFactoryBuilder<V, OPA> {
-        return new ParameterDecoratorFactoryBuilder<V, OPA>(this.metadataKey, parameterHandler);
+    public parameter(parameterHandler: ParameterHandler<O>): ParameterDecoratorFactoryBuilder<O> {
+        return new ParameterDecoratorFactoryBuilder<O>(this.defaultOption, this.metadataKey, parameterHandler);
     }
 
-    public method<OM = void>(
-        methodHandler: MethodHandler<V, OM>
-    ): MethodDecoratorFactoryBuilder<V, OM> {
-        return new MethodDecoratorFactoryBuilder<V, OM>(this.metadataKey, methodHandler);
+    public method(methodHandler: MethodHandler<O>): MethodDecoratorFactoryBuilder<O> {
+        return new MethodDecoratorFactoryBuilder<O>(this.defaultOption, this.metadataKey, methodHandler);
     }
 
-    public class<OC = void>(
-        classHandler: ClassHandler<V, OC>
-    ): ClassDecoratorFactoryBuilder<V, OC> {
-        return new ClassDecoratorFactoryBuilder<V, OC>(this.metadataKey, classHandler);
+    public class(classHandler: ClassHandler<O>): ClassDecoratorFactoryBuilder<O> {
+        return new ClassDecoratorFactoryBuilder<O>(this.defaultOption, this.metadataKey, classHandler);
     }
-    public property<OP = void>(propertyHandler: PropertyHandler<V, OP>): PropertyDecoratorFactoryBuilder<V, OP> {
-        return new PropertyDecoratorFactoryBuilder<V, OP>(this.metadataKey, propertyHandler);
+    public property(propertyHandler: PropertyHandler<O>): PropertyDecoratorFactoryBuilder<O> {
+        return new PropertyDecoratorFactoryBuilder<O>(this.defaultOption, this.metadataKey, propertyHandler);
     }
 
     protected build(): any {

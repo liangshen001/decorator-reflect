@@ -1,3 +1,2 @@
 
-export type ClassHandler<V, OC> =
-    (<TFunction extends Function>(option: OC, target: TFunction, paramTypes: Function[]) => V) | void;
+export type ClassHandler<O> = (<TFunction extends Function>(target: TFunction, option: O, paramTypes: Function[]) => TFunction | void) | void;
