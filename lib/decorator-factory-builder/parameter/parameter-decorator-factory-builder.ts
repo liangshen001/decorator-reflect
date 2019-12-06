@@ -9,38 +9,39 @@ import {ParameterPropertyDecoratorFactoryBuilder} from './parameter-property-dec
 import {MetadataDecoratorFactory} from "../../bean/metadata-decorator-factory";
 import {MakeDecoratorUtil} from "../../util/make-decorator-util";
 
-type ParameterDecoratorFactory<OPA> = (option: OPA) => ParameterDecorator;
+type ParameterDecoratorFactory<O> = (option: O) => ParameterDecorator;
 
-class ParameterDecoratorFactoryBuilder<V, OPA> extends AbstractDecoratorFactoryBuilder<V, ParameterDecoratorFactory<OPA>> {
+class ParameterDecoratorFactoryBuilder<O> extends AbstractDecoratorFactoryBuilder<O> {
 
     constructor(
+        public defaultOption: O | ((o: O) => O) | undefined,
         public metadataKey: string | symbol | undefined,
-        public parameterHandler: ParameterHandler<V, OPA>
+        public parameterHandler: ParameterHandler<O>
     ) {
-        super(metadataKey);
+        super(defaultOption, metadataKey);
     }
 
-    public build(): MetadataDecoratorFactory<ParameterDecoratorFactory<OPA>, V> {
-        return MakeDecoratorUtil.makeParameterAndPropertyAndMethodAndClassDecorator<OPA, void, void, void, V>(
-            this.parameterHandler, undefined, undefined, undefined, this.metadataKey);
+    public build(): ParameterDecoratorFactory<O> {
+        return MakeDecoratorUtil.makeParameterAndPropertyAndMethodAndClassDecorator<O>(
+            this.parameterHandler, undefined, undefined, undefined, this.defaultOption, this.metadataKey);
     }
 
-    public parameter<OPA = void>(
-        parameterHandler: ParameterHandler<V, OPA>
-    ): ParameterDecoratorFactoryBuilder<V, OPA> {
-        return new ParameterDecoratorFactoryBuilder<V, OPA>(this.metadataKey, parameterHandler);
+    public parameter(
+        parameterHandler: ParameterHandler<O>
+    ): ParameterDecoratorFactoryBuilder<O> {
+        return new ParameterDecoratorFactoryBuilder<O>(this.defaultOption, this.metadataKey, parameterHandler);
     }
-    public method<OM = void>(
-        methodHandler: MethodHandler<V, OM>
-    ): ParameterMethodDecoratorFactoryBuilder<V, OPA, OM> {
-        return new ParameterMethodDecoratorFactoryBuilder<V, OPA, OM>(this.metadataKey, this.parameterHandler, methodHandler);
+    public method(
+        methodHandler: MethodHandler<O>
+    ): ParameterMethodDecoratorFactoryBuilder<O> {
+        return new ParameterMethodDecoratorFactoryBuilder<O>(this.defaultOption, this.metadataKey, this.parameterHandler, methodHandler);
     }
-    public class<OC = void>(classHandler: ClassHandler<V, OC>): ParameterClassDecoratorFactoryBuilder<V, OPA, OC> {
-        return new ParameterClassDecoratorFactoryBuilder<V, OPA, OC>(this.metadataKey, this.parameterHandler, classHandler);
+    public class(classHandler: ClassHandler<O>): ParameterClassDecoratorFactoryBuilder<O> {
+        return new ParameterClassDecoratorFactoryBuilder<O>(this.defaultOption, this.metadataKey, this.parameterHandler, classHandler);
     }
 
-    public property<OP = void>(propertyHandler: PropertyHandler<V, OP>): ParameterPropertyDecoratorFactoryBuilder<V, OPA, OP> {
-        return new ParameterPropertyDecoratorFactoryBuilder<V, OPA, OP>(this.metadataKey, this.parameterHandler, propertyHandler);
+    public property(propertyHandler: PropertyHandler<O>): ParameterPropertyDecoratorFactoryBuilder<O> {
+        return new ParameterPropertyDecoratorFactoryBuilder<O>(this.defaultOption, this.metadataKey, this.parameterHandler, propertyHandler);
     }
 
 }

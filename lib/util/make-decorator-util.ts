@@ -23,33 +23,42 @@ export class MakeDecoratorUtil {
      * @param classHandler
      * @param metadataKey
      */
-    public static makeParameterAndPropertyAndMethodAndClassDecorator<OPA, OP, OM, OC, V = void>(
-        parameterHandler?: ParameterHandler<V, OPA>,
-        propertyHandler?: PropertyHandler<V, OP>,
-        methodHandler?: MethodHandler<V, OM>,
-        classHandler?: ClassHandler<V, OC>,
+    public static makeParameterAndPropertyAndMethodAndClassDecorator<O>(
+        parameterHandler?: ParameterHandler<O>,
+        propertyHandler?: PropertyHandler<O>,
+        methodHandler?: MethodHandler<O>,
+        classHandler?: ClassHandler<O>,
+        defaultOption?: O | ((o: O) => O),
         metadataKey?: string | symbol
     ): any {
         const factory = (option: any) =>
             (...args: any[]) => {
+                // 默认值
+                if (defaultOption) {
+                    if (defaultOption instanceof Function) {
+                        option = defaultOption(option);
+                    } else if (!option) {
+                        option = defaultOption;
+                    }
+                }
                 // args 参数为装饰器 回调参数 不同种类的装饰器有不同的参数
                 if (args.length === 1) {
                     // 处理类装饰器
-                    return MakeDecoratorUtil.makeClassDecorator<OC, V>(
+                    return MakeDecoratorUtil.makeClassDecorator<O>(
                         classHandler, metadataKey, factory)(option)(args[0]);
                 } else if (args.length === 3) {
                     if (args[2] === undefined) {
                         // 外理属性装饰器
-                        return MakeDecoratorUtil.makePropertyDecorator<OP, V>(
+                        return MakeDecoratorUtil.makePropertyDecorator<O>(
                             propertyHandler, metadataKey, factory)(option)(args[0], args[1]);
                     } else {
                         if (typeof args[2] === 'number') {
                             // 处理参数装饰器
-                            return MakeDecoratorUtil.makeParameterDecorator<OPA, V>(
+                            return MakeDecoratorUtil.makeParameterDecorator<O>(
                                 parameterHandler, metadataKey, factory)(option)(args[0], args[1], args[2]);
                         } else {
                             // 处理方法装饰器
-                            return MakeDecoratorUtil.makeMethodDecorator<OM, V>(
+                            return MakeDecoratorUtil.makeMethodDecorator<O>(
                                 methodHandler, metadataKey, factory)(option)(args[0], args[1], args[2]);
                         }
                     }
@@ -65,8 +74,8 @@ export class MakeDecoratorUtil {
      * @param metadataKey
      * @param factory
      */
-    private static makeMethodDecorator<O, V = void>(
-        handler: MethodHandler<V, O>,
+    private static makeMethodDecorator<O>(
+        handler: MethodHandler<O>,
         metadataKey?: string | symbol,
         factory?: any
     ): (option: O) => MethodDecorator {
@@ -217,8 +226,8 @@ export class MakeDecoratorUtil {
      * @param factory
      */
 
-    private static makePropertyDecorator<O, V = void>(
-        handler?: PropertyHandler<V, O>,
+    private static makePropertyDecorator<O>(
+        handler?: PropertyHandler<O>,
         metadataKey?: string | symbol,
         factory?: any
     ): (option: O) => PropertyDecorator {
@@ -234,13 +243,12 @@ export class MakeDecoratorUtil {
                 } else {
                     metadataValue = option || true;
                 }
-                Reflect.defineMetadata(metadataKey, metadataValue, target, propertyKey);
+                Reflect.defineMetadata(metadataKey, option, target, propertyKey);
                 /********************************************************************************************************/
                 this.pushClass(target, {
                     property: {
                         decorator: {
                             decoratorFactory: factory,
-                            metadataValue,
                             option
                         },
                         propertyKey
@@ -257,8 +265,8 @@ export class MakeDecoratorUtil {
      * @return
      */
 
-    private static makeClassDecorator<O, V = void>(
-        handler?: ClassHandler<V, O>,
+    private static makeClassDecorator<O>(
+        handler?: ClassHandler<O>,
         metadataKey?: string | symbol,
         factory?: any
     ): (option: O) => ClassDecorator {
@@ -296,7 +304,7 @@ export class MakeDecoratorUtil {
      */
 
     private static makeParameterDecorator<O, V = void>(
-        handler?: ParameterHandler<V, O>,
+        handler?: ParameterHandler<O>,
         metadataKey?: string | symbol,
         factory?: any
     ): (option: O) => ParameterDecorator {

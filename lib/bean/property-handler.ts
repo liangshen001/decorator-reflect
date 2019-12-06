@@ -1,2 +1,2 @@
-export type PropertyHandler<V, OP> =
-    ((option: OP, target: Object, propertyKey: string, type: Function) => V) | void;
+export type PropertyHandler<O> =
+    ((option: O, target: Object, propertyKey: string, type: Function) => void) | void;
