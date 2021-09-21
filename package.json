@@ -3,6 +3,22 @@
   "version": "2.0.2",
   "description": "ts装饰器反射增强库",
   "main": "dist/index.js",
+  "author": {
+    "name": "liangshen001",
+    "email": "850598163@qq.com"
+  },
+  "bugs": {
+    "url": "https://github.com/liangshen001/ts-decorator-reflect/issues"
+  },
+  "homepage": "https://github.com/liangshen001/ts-decorator-reflect/README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liangshen001/ts-decorator-reflect.git"
+  },
+  "keywords": [
+    "angular",
+    "electron"
+  ],
   "types": "dist/index.d.ts",
   "scripts": {
     "start": "ts-node ./src/test.ts",
@@ -10,7 +26,6 @@
     "release:minor": "tsc && npm version minor && npm publish",
     "release:major": "tsc && npm version major && npm publish"
   },
-  "author": "",
   "license": "ISC",
   "peerDependencies": {
     "typescript": "^3.7.2",
