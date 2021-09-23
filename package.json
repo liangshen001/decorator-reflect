@@ -16,8 +16,11 @@
     "url": "git+https://github.com/liangshen001/ts-decorator-reflect.git"
   },
   "keywords": [
-    "angular",
-    "electron"
+    "decorator",
+    "reflect",
+    "ts",
+    "typescript",
+    "metadata"
   ],
   "types": "dist/index.d.ts",
   "scripts": {

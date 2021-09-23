@@ -1,7 +1,7 @@
 export * from './lib/util/reflect-util';
-export * from './lib/decorator-factory-builder/decorator-factory-builder';
+export * from './lib/annotation-builder/annotation-builder';
 export * from './lib/type/classDefinition';
-export * from './lib/type/decoratorDefinition';
+export * from './lib/type/annotationDefinition';
 export * from './lib/type/methodDefinition';
 export * from './lib/type/parameterDefinition';
 export * from './lib/type/propertyDefinition';
@@ -9,3 +9,6 @@ export * from './lib/bean/class-handler';
 export * from './lib/bean/method-handler';
 export * from './lib/bean/parameter-handler';
 export * from './lib/bean/property-handler';
+export * from './lib/reflect';
+export * from './lib/util/make-annotation-util';
+export * from './lib/util/reflect-metadata-util';

@@ -1,15 +1,25 @@
-import {DecoratorFactoryBuilder} from "../lib/decorator-factory-builder/decorator-factory-builder";
+import {AnnotationBuilder} from "../lib/annotation-builder/annotation-builder";
 
-const Demo1ClassDecorator = DecoratorFactoryBuilder.create<string>().class((target, option, paramTypes) => {
-    console.log('target:', target)
-    console.log('option:', option)
-    console.log('paramTypes:', paramTypes)
-}).build();
+const Log = AnnotationBuilder.create()
+    .method((target, propertyKey, descriptor, option) => ({
+        ...descriptor,
+        value: function(...args: object[]) {
+            console.time();
+            try {
+                return descriptor.value.apply(this, args);
+            } finally {
+                console.timeEnd();
+            }
+        }
+    })).build();
 
-@Demo1ClassDecorator('demo1')
+
 class Demo1Class {
-
-    constructor(param1: string, param2: number) {
+    @Log()
+    public method() {
+        console.log('call method')
     }
 }
+
+new Demo1Class().method();
 

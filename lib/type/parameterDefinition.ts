@@ -1,6 +1,6 @@
-import {DecoratorDefinition} from "./decoratorDefinition";
+import {AnnotationDefinition} from "./annotationDefinition";
 
 export type ParameterDefinition = {
     type: Function;
-    decorators: DecoratorDefinition[];
+    annotations: AnnotationDefinition[];
 }

@@ -1,4 +1,4 @@
-import {DecoratorDefinition} from "./decoratorDefinition";
+import {AnnotationDefinition} from "./annotationDefinition";
 
 
 export type PropertyDefinition = {
@@ -11,7 +11,7 @@ export type PropertyDefinition = {
      */
     name: string | symbol;
 
-    decorators: DecoratorDefinition[];
+    annotations: AnnotationDefinition[];
 
     isStatic: boolean;
 }

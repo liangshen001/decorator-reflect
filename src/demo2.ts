@@ -1,24 +1,23 @@
-import {DecoratorFactoryBuilder} from "../lib/decorator-factory-builder/decorator-factory-builder";
+import {AnnotationBuilder} from "../lib/annotation-builder/annotation-builder";
+import {ReflectUtil} from "../lib/util/reflect-util";
 
-type Demo1MethodDecoratorOption = {
-    method: 'POST' | 'GET'
+const Test: ClassDecorator = (target) => {
+    // do something
 }
-const Demo1MethodDecorator = DecoratorFactoryBuilder.create<Demo1MethodDecoratorOption>()
-    .method((target, propertyKey, descriptor,
-             option, paramTypes, returnType) => {
-        console.log('target:', target)
-        console.log('option:', option)
-        console.log('paramTypes:', paramTypes)
-        console.log('returnType:', returnType)
-    }).build();
+const Test2: ClassDecorator = (target) => {
+    // do something
+}
 
+const TestWrapper = AnnotationBuilder.create().class(Test).class(Test2).build();
 
+@Test
+@Test2
+class DemoClass {
+}
+
+@TestWrapper()
 class Demo2Class {
-    @Demo1MethodDecorator({
-        method: 'POST'
-    })
-    method(param1: number): string {
-        return '';
-    }
 }
+console.log(ReflectUtil.getClassDefinition(Demo2Class));
+
 

@@ -1,4 +1,4 @@
-import {DecoratorDefinition} from "./decoratorDefinition";
+import {AnnotationDefinition} from "./annotationDefinition";
 import {PropertyDefinition} from "./propertyDefinition";
 import {MethodDefinition} from "./methodDefinition";
 import {ParameterDefinition} from "./parameterDefinition";
@@ -6,7 +6,7 @@ import {ParameterDefinition} from "./parameterDefinition";
 export type ClassDefinition<T extends Function> = {
     name: string;
     type: T;
-    decorators: DecoratorDefinition[];
+    annotations: AnnotationDefinition[];
     properties: PropertyDefinition[];
     methods: MethodDefinition[];
     parameters: ParameterDefinition[];

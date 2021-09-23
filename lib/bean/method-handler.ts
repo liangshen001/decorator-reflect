@@ -1,2 +1,2 @@
-export type MethodHandler<O> = (<T>(target: Object, propertyKey: string, descriptor: TypedPropertyDescriptor<T>, option: O,
-                                    paramTypes: Function[], returnType: Function) => TypedPropertyDescriptor<T> | void) | void;
+export type MethodHandler<O> = ((target: Object, propertyKey: string, descriptor: PropertyDescriptor,
+                                    option: O, isStatic: boolean, paramTypes: Function[], returnType: Function) => PropertyDescriptor | void);
