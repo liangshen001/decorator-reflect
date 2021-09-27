@@ -3,7 +3,7 @@ import {MakeAnnotationUtil} from "./make-annotation-util";
 import {ClassDefinition} from "../type/classDefinition";
 import {MethodDefinition} from "../type/methodDefinition";
 import {PropertyDefinition} from "../type/propertyDefinition";
-import {AnnotationDefinition} from "../type/annotationDefinition";
+import {DecoratorDefinition} from "../type/decoratorDefinition";
 import {ParameterDefinition} from "../type/parameterDefinition";
 
 export class ReflectUtil {
@@ -18,7 +18,7 @@ export class ReflectUtil {
             name: target.name,
             parameters: [],
             methods: [],
-            annotations: [],
+            decorators: [],
             properties: []
         }
     }
@@ -43,29 +43,29 @@ export class ReflectUtil {
         return methodDefinition?.parameters.find((i, _index) => index === _index);
     }
 
-    public static getAnnotationDefinitionForClass<T extends Function>(target: T, decorator: Function): AnnotationDefinition | undefined {
+    public static getDecoratorDefinitionForClass<T extends Function>(target: T, decorator: Function): DecoratorDefinition | undefined {
         let classDefinition = ReflectUtil.getClassDefinition(target);
-        return classDefinition.annotations.find(i => i.type === decorator);
+        return classDefinition.decorators.find(i => i.type === decorator);
     }
 
-    public static getAnnotationDefinitionForMethod<T extends Function>(target: T, name: string, decorator: Function): AnnotationDefinition | undefined {
+    public static getDecoratorDefinitionForMethod<T extends Function>(target: T, name: string, decorator: Function): DecoratorDefinition | undefined {
         let methodDefinition = ReflectUtil.getMethodDefinition(target, name);
-        return methodDefinition?.annotations.find(i => i.type === decorator);
+        return methodDefinition?.decorators.find(i => i.type === decorator);
     }
 
-    public static getAnnotationDefinitionForProperty<T extends Function>(target: T, name: string, decorator: Function): AnnotationDefinition | undefined {
+    public static getDecoratorDefinitionForProperty<T extends Function>(target: T, name: string, decorator: Function): DecoratorDefinition | undefined {
         let methodDefinition = ReflectUtil.getPropertyDefinition(target, name);
-        return methodDefinition?.annotations.find(i => i.type === decorator);
+        return methodDefinition?.decorators.find(i => i.type === decorator);
     }
 
-    public static getAnnotationDefinitionForMethodParameter<T extends Function>(target: T, name: string, index: number, decorator: Function): AnnotationDefinition | undefined {
+    public static getDecoratorDefinitionForMethodParameter<T extends Function>(target: T, name: string, index: number, decorator: Function): DecoratorDefinition | undefined {
         let parameterDefinitionForMethod = ReflectUtil.getParameterDefinitionForMethod(target, name, index);
-        return parameterDefinitionForMethod?.annotations.find(i => i.type === decorator);
+        return parameterDefinitionForMethod?.decorators.find(i => i.type === decorator);
     }
 
-    public static getAnnotationDefinitionForClassParameter<T extends Function>(target: T, index: number, decorator: Function): AnnotationDefinition | undefined {
+    public static getAnnotationDefinitionForClassParameter<T extends Function>(target: T, index: number, decorator: Function): DecoratorDefinition | undefined {
         let parameterDefinitionForClass = ReflectUtil.getParameterDefinitionForClass(target, index);
-        return parameterDefinitionForClass?.annotations.find(i => i.type === decorator);
+        return parameterDefinitionForClass?.decorators.find(i => i.type === decorator);
     }
 }
 

@@ -1,10 +1,10 @@
-import {AnnotationBuilder} from "../lib/annotation-builder/annotation-builder";
+import {DecoratorBuilder} from "../lib/annotation-builder/decorator-builder";
 import {ReflectUtil} from "../lib/util/reflect-util";
 
 /**
  * 创建装饰器工厂 TestAnnotation
  */
-const TestAnnotation = AnnotationBuilder.create<string>()
+const TestAnnotation = DecoratorBuilder.create<string>()
     .class((target, option, paramTypes) => {
         console.log('**********class');
         console.log(target); // [Function: TestClass]
@@ -49,4 +49,4 @@ class TestClass {
     }
 }
 // 获取反射信息
-// console.log(ReflectUtil.getClassDefinition(TestClass));
+console.log(ReflectUtil.getClassDefinition(TestClass));

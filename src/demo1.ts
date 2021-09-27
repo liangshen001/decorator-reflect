@@ -1,25 +1,20 @@
-import {AnnotationBuilder} from "../lib/annotation-builder/annotation-builder";
+import {DecoratorBuilder} from "../lib/annotation-builder/decorator-builder";
+import {ReflectUtil} from "../lib/util/reflect-util";
+import {ReflectMetadataUtil} from "../lib/util/reflect-metadata-util";
 
-const Log = AnnotationBuilder.create()
-    .method((target, propertyKey, descriptor, option) => ({
-        ...descriptor,
-        value: function(...args: object[]) {
-            console.time();
-            try {
-                return descriptor.value.apply(this, args);
-            } finally {
-                console.timeEnd();
-            }
-        }
-    })).build();
+const Log = DecoratorBuilder.create(123).class((target) => {
+}).method((target, propertyKey, descriptor, option) => {
+}).build();
 
-
+@Log(342)
 class Demo1Class {
-    @Log()
+    constructor(a: number) {
+    }
+    @Log(342)
     public method() {
         console.log('call method')
     }
 }
 
-new Demo1Class().method();
+console.log(ReflectUtil.getClassDefinition(Demo1Class));
 

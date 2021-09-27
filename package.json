@@ -1,7 +1,7 @@
 {
   "name": "ts-decorator-reflect",
   "version": "2.1.0",
-  "description": "ts装饰器反射增强库",
+  "description": "装饰器反射库",
   "main": "dist/index.js",
   "author": {
     "name": "liangshen001",
@@ -10,7 +10,7 @@
   "bugs": {
     "url": "https://github.com/liangshen001/ts-decorator-reflect/issues"
   },
-  "homepage": "https://github.com/liangshen001/ts-decorator-reflect/README.md",
+  "homepage": "https://github.com/liangshen001/ts-decorator-reflect/blob/master/README.md",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/liangshen001/ts-decorator-reflect.git"

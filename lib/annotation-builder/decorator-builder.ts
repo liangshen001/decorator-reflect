@@ -10,7 +10,7 @@ import {PropertyAnnotationBuilder} from './property/property-annotation-builder'
 import {MakeAnnotationUtil} from "../util/make-annotation-util";
 import {Annotation} from "../bean/annotation";
 
-class AnnotationBuilder<O> {
+class DecoratorBuilder<O> {
     parameterHandlers: ParameterHandler<O>[] = [];
     propertyHandlers: PropertyHandler<O>[] = [];
     methodHandlers: MethodHandler<O>[] = [];
@@ -19,8 +19,8 @@ class AnnotationBuilder<O> {
     protected constructor(public defaultOption?: O | ((o: O) => O),
                           public metadataKey?: string | symbol) {}
 
-    public static create<O = void>(defaultOption?: O | ((o: O) => O), metadataKey?: string | symbol): AnnotationBuilder<O> {
-        return new AnnotationBuilder<O>(defaultOption, metadataKey || Symbol());
+    public static create<O = void>(defaultOption?: O | ((o: O) => O), metadataKey?: string | symbol): DecoratorBuilder<O> {
+        return new DecoratorBuilder<O>(defaultOption, metadataKey || Symbol());
     }
 
     public parameter(parameterHandler?: ParameterHandler<O>): ParameterAnnotationBuilder<O> {
@@ -56,6 +56,4 @@ class AnnotationBuilder<O> {
     }
 }
 
-const DecoratorFactoryBuilder = AnnotationBuilder;
-
-export {AnnotationBuilder, DecoratorFactoryBuilder};
+export {DecoratorBuilder, DecoratorBuilder as DecoratorFactoryBuilder, DecoratorBuilder as AnnotationBuilder};

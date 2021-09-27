@@ -2,7 +2,7 @@ import {MethodHandler} from "../bean/method-handler";
 import {PropertyHandler} from "../bean/property-handler";
 import {ClassHandler} from "../bean/class-handler";
 import {ParameterHandler} from "../bean/parameter-handler";
-import {AnnotationDefinition} from "../type/annotationDefinition";
+import {DecoratorDefinition} from "../type/decoratorDefinition";
 import {ClassDefinition} from "../type/classDefinition";
 import {ReflectMetadataUtil} from "./reflect-metadata-util";
 
@@ -78,14 +78,14 @@ export class MakeAnnotationUtil {
         defaultOption?: O | ((o: O) => O),
         metadataKey?: string | symbol
     ): any {
-        const decoratorFactory = (option?: any) => {
+        const decoratorFactory = (...params: any[]) => {
             // // 装饰器工场无参时可省略()  但是类装饰器工场的第一个参数将不能为function类型 否则会断定为无参类型进而报错，停用
-            // if (params.length === 1 && typeof params[0] === 'function') {
-            //     return this.makeDecorator(params, decoratorFactory, undefined, parameterHandler,
-            //         propertyHandler, methodHandler, classHandler, defaultOption, metadataKey)
-            // }
+            if (params.length > 1) {
+                return this.makeDecorator(params, decoratorFactory, undefined, parameterHandlers,
+                    propertyHandlers, methodHandlers, classHandlers, defaultOption, metadataKey)
+            }
             return (...args: any[]) => {
-                return this.makeDecorator(args, decoratorFactory, option, parameterHandlers, propertyHandlers,
+                return this.makeDecorator(args, decoratorFactory, params[0], parameterHandlers, propertyHandlers,
                     methodHandlers, classHandlers, defaultOption, metadataKey)
             }
         };
@@ -143,18 +143,18 @@ export class MakeAnnotationUtil {
     private static pushClass(target: Object, options: {
         method?: {
             propertyKey: string | symbol;
-            decorator?: AnnotationDefinition;
+            decorator?: DecoratorDefinition;
             parameter?: {
-                decorator: AnnotationDefinition;
+                decorator: DecoratorDefinition;
                 index: number;
             }
         };
         property?: {
-            decorator: AnnotationDefinition;
+            decorator: DecoratorDefinition;
             propertyKey: string | symbol;
         };
         class?: {
-            decorator: AnnotationDefinition;
+            decorator: DecoratorDefinition;
         };
 
     }) {
@@ -172,36 +172,36 @@ export class MakeAnnotationUtil {
         if (this.classesMap.has(classType)) {
             classInfo = this.classesMap.get(classType)!;
         } else {
-            const paramtypes = ReflectMetadataUtil.getParamsTypes(classType);
-
             classInfo = {
-                annotations: [],
+                decorators: [],
                 methods: [],
                 properties: [],
                 name: classType.name,
                 type: classType,
-                parameters: paramtypes.map(type => ({
-                    annotations: [],
-                    type: type
-                })),
+                parameters: [],
             };
             this.classesMap.set(classType, classInfo);
         }
 
         if (options.class) {
-            classInfo.annotations.push(options.class.decorator);
+            const paramTypes = ReflectMetadataUtil.getParamsTypes(classType);
+            classInfo.decorators.push(options.class.decorator);
+            classInfo.parameters = paramTypes?.map(type => ({
+                decorators: [],
+                type: type
+            }));
         } else if (options.method) {
             if (options.method.propertyKey === undefined) {
                 if (options.method.parameter) {
                     if (!classInfo.parameters.length) {
-                        const paramtypes = ReflectMetadataUtil.getParamsTypes(classType);
-                        classInfo.parameters = paramtypes.map(type => ({
-                            annotations: [],
+                        const paramTypes = ReflectMetadataUtil.getParamsTypes(classType);
+                        classInfo.parameters = paramTypes.map(type => ({
+                            decorators: [],
                             type: type
                         }));
                     }
                     const parameter = classInfo.parameters[options.method.parameter.index];
-                    parameter.annotations.push(options.method.parameter.decorator);
+                    parameter.decorators.push(options.method.parameter.decorator);
                 }
             } else {
                 let method = classInfo.methods.find(method => method.name == options.method!.propertyKey);
@@ -210,10 +210,10 @@ export class MakeAnnotationUtil {
                     const returntype = ReflectMetadataUtil.getReturnType(target, options.method.propertyKey);
                     method = {
                         name: options.method.propertyKey,
-                        annotations: [],
+                        decorators: [],
                         returnType: returntype,
                         parameters: paramtypes.map(type => ({
-                            annotations: [],
+                            decorators: [],
                             type: type
                         })),
                         isStatic
@@ -221,12 +221,12 @@ export class MakeAnnotationUtil {
                     classInfo.methods.push(method);
                 }
                 if (options.method.decorator) {
-                    method.annotations.push(options.method.decorator);
+                    method.decorators.push(options.method.decorator);
                 }
 
                 if (options.method.parameter) {
                     const parameter = method.parameters[options.method.parameter.index];
-                    parameter.annotations.push(options.method.parameter.decorator);
+                    parameter.decorators.push(options.method.parameter.decorator);
                 }
             }
         } else if (options.property) {
@@ -235,13 +235,13 @@ export class MakeAnnotationUtil {
                 const type = ReflectMetadataUtil.getType(target, options.property.propertyKey);
                 property = {
                     type,
-                    annotations: [],
+                    decorators: [],
                     name: options.property.propertyKey,
                     isStatic
                 };
                 classInfo.properties.push(property);
             }
-            property.annotations.push(options.property.decorator);
+            property.decorators.push(options.property.decorator);
         }
     }
 

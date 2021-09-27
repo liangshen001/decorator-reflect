@@ -4,9 +4,9 @@ import {ClassHandler} from '../../bean/class-handler';
 import {MethodHandler} from '../../bean/method-handler';
 import {MethodClassAnnotationBuilder} from '../method/method-class-annotation-builder';
 import {PropertyClassAnnotationBuilder} from '../property/property-class-annotation-builder';
-import {ParameterClassDecoratorFactoryBuilder} from '../parameter/parameter-class-decorator-factory-builder';
+import {ParameterClassAnnotationBuilder} from '../parameter/parameter-class-annotation-builder';
 
-type ClassAnnotation<O> = (option: O) => ClassDecorator;
+type ClassAnnotation<O> = (option?: O) => ClassDecorator;
 // type ClassDecoratorFactory<O> =
 //     O extends void ?
 //         (ClassDecorator & (() => ClassDecorator)) :
@@ -17,7 +17,7 @@ type ClassAnnotationBuilder<O> = {
     class(classHandler?: ClassHandler<O>): ClassAnnotationBuilder<O>;
     method(methodHandler?: MethodHandler<O>): MethodClassAnnotationBuilder<O>;
     property(propertyHandler?: PropertyHandler<O>): PropertyClassAnnotationBuilder<O>;
-    parameter(parameterHandler?: ParameterHandler<O>): ParameterClassDecoratorFactoryBuilder<O>;
+    parameter(parameterHandler?: ParameterHandler<O>): ParameterClassAnnotationBuilder<O>;
 }
 
 // class ClassAnnotationBuilder<O> extends AbstractAnnotationBuilder<O> {

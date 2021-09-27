@@ -5,10 +5,11 @@ import {MethodHandler} from '../../bean/method-handler';
 import {ParameterMethodClassAnnotationBuilder} from './parameter-method-class-annotation-builder';
 import {ParameterPropertyMethodAnnotationBuilder} from './parameter-property-method-annotation-builder';
 
-type ParameterMethodDecoratorFactory<O> = (option: O) => (ParameterDecorator & MethodDecorator);
+type ParameterMethodDecorator = ParameterDecorator & MethodDecorator;
+type ParameterMethodAnnotation<O> = ParameterMethodDecorator & ((option?: O) => ParameterMethodDecorator);
 
 type ParameterMethodAnnotationBuilder<O> = {
-    build(): ParameterMethodDecoratorFactory<O>;
+    build(): ParameterMethodAnnotation<O>;
     parameter(parameterHandler?: ParameterHandler<O>): ParameterMethodAnnotationBuilder<O>;
     method(
         methodHandler?: MethodHandler<O>
@@ -54,4 +55,4 @@ type ParameterMethodAnnotationBuilder<O> = {
 //     }
 // }
 
-export {ParameterMethodDecoratorFactory, ParameterMethodAnnotationBuilder};
+export {ParameterMethodAnnotation, ParameterMethodAnnotationBuilder, ParameterMethodDecorator};

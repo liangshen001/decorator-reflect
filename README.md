@@ -1,8 +1,11 @@
-# Typescript '注解' (装饰器工厂)
+# 装饰器构建 + 反射工具
+
+**更名为decorator-reflect**
+[decorator-reflect](https://www.npmjs.com/package/ts-decorator-reflect)
 
 **用于创建装饰器工厂（带参数的装饰器、装饰器工厂、 这里叫这个工厂为'注解'）, 合并现有的装饰器 ，并可以像java反射一样得到typescript中class信息（属性、方法、方法参数、以及它们的装饰器工厂（注解）和类型）**
 
-**AnnotationBuilder build出来的是装饰器的工厂 使用方法 @Test() 而不是@Test 所以Test是一个工厂这里称它为注解（ AnnotationBuilder 等阶 DecoratorFactoryBuilder）**
+**DecoratorBuilder build出来的是装饰器的工厂 无参时的使用方法 @Test() 或 @Test**
 
 ## 安装
 ```
@@ -14,9 +17,9 @@ npm i ts-decorator-reflect -s
 ### 基本使用方法
 
 ```typescript
-import {AnnotationBuilder, ReflectUtil} from "ts-decorator-reflect";
+import {DecoratorBuilder, ReflectUtil} from "ts-decorator-reflect";
 
-const TestAnnotation = AnnotationBuilder.create<string>()
+const TestAnnotation = DecoratorBuilder.create<string>()
     .class((target, option, paramTypes) => {
         console.log('**********class');
         console.log(target); // [Function: TestClass]
@@ -65,7 +68,7 @@ class TestClass {
 ```
 ### 合并多个已有装饰器
 ```typescript
-import {AnnotationBuilder, ReflectUtil} from "ts-decorator-reflect";
+import {DecoratorBuilder, ReflectUtil} from "ts-decorator-reflect";
 const Test: ClassDecorator = (target) => {
     // do something
 }
@@ -76,7 +79,7 @@ const Test3: MethodDecorator = (target) => {
     // do something
 }
 
-const TestWrapper = AnnotationBuilder.create().class(Test).class(Test2).method(Test3).build();
+const TestWrapper = DecoratorBuilder.create().class(Test).class(Test2).method(Test3).build();
 
 @TestWrapper()
 class TestClass {
@@ -127,9 +130,9 @@ vim test.ts
 
 ### test.ts
 ```typescript
-import {DecoratorFactoryBuilder, ReflectUtil} from "ts-decorator-reflect";
+import {DecoratorBuilder, ReflectUtil} from "ts-decorator-reflect";
 
-const TestDecorator = DecoratorFactoryBuilder.create<string>().class().method().parameter().property().build();
+const TestDecorator = DecoratorBuilder.create<string>().class().method().parameter().property().build();
 
 @TestDecorator('test class option')
 export class Test {

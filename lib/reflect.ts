@@ -2,7 +2,7 @@ import {ClassDefinition} from "./type/classDefinition";
 import {MethodDefinition} from "./type/methodDefinition";
 import {ParameterDefinition} from "./type/parameterDefinition";
 import {PropertyDefinition} from "./type/propertyDefinition";
-import {AnnotationDefinition} from "./type/annotationDefinition";
+import {DecoratorDefinition} from "./type/decoratorDefinition";
 import {ReflectUtil} from "./util/reflect-util";
 
 export namespace Reflect {
@@ -46,7 +46,7 @@ export namespace Reflect {
      * @param target
      * @param decorator
      */
-    export declare function getDecoratorDefinitionForClass<T extends Function>(target: T, decorator: Function): AnnotationDefinition | undefined;
+    export declare function getDecoratorDefinitionForClass<T extends Function>(target: T, decorator: Function): DecoratorDefinition | undefined;
 
     /**
      * 获取指定方法的指定装饰器的定义
@@ -54,7 +54,7 @@ export namespace Reflect {
      * @param name
      * @param decorator
      */
-    export declare function getDecoratorDefinitionForMethod<T extends Function>(target: T, name: string, decorator: Function): AnnotationDefinition | undefined;
+    export declare function getDecoratorDefinitionForMethod<T extends Function>(target: T, name: string, decorator: Function): DecoratorDefinition | undefined;
 
     /**
      * 获取指定属性的指定装饰器的定义
@@ -62,7 +62,7 @@ export namespace Reflect {
      * @param name
      * @param decorator
      */
-    export declare function getDecoratorDefinitionForProperty<T extends Function>(target: T, name: string, decorator: Function): AnnotationDefinition | undefined;
+    export declare function getDecoratorDefinitionForProperty<T extends Function>(target: T, name: string, decorator: Function): DecoratorDefinition | undefined;
 
     /**
      * 获取指定方法参数的指定装饰器的定义
@@ -71,7 +71,7 @@ export namespace Reflect {
      * @param index
      * @param decorator
      */
-    export declare function getDecoratorDefinitionForMethodParameter<T extends Function>(target: T, name: string, index: number, decorator: Function): AnnotationDefinition | undefined;
+    export declare function getDecoratorDefinitionForMethodParameter<T extends Function>(target: T, name: string, index: number, decorator: Function): DecoratorDefinition | undefined;
 
     /**
      * 获取类构造器指定参数的指定装饰器的定义
@@ -79,7 +79,7 @@ export namespace Reflect {
      * @param index
      * @param decorator
      */
-    export declare function getDecoratorDefinitionForClassParameter<T extends Function>(target: T, index: number, decorator: Function): AnnotationDefinition | undefined;
+    export declare function getDecoratorDefinitionForClassParameter<T extends Function>(target: T, index: number, decorator: Function): DecoratorDefinition | undefined;
 
     declare const global: any;
     (function (this: any, factory: (exporter: <K extends keyof typeof Reflect>(key: K, value: typeof Reflect[K]) => void) => void) {
@@ -113,10 +113,10 @@ export namespace Reflect {
         exporter('getParameterDefinitionForClass', ReflectUtil.getParameterDefinitionForClass)
         exporter('getPropertyDefinition', ReflectUtil.getPropertyDefinition)
         exporter('getParameterDefinitionForMethod', ReflectUtil.getParameterDefinitionForMethod)
-        exporter('getDecoratorDefinitionForClass', ReflectUtil.getAnnotationDefinitionForClass)
-        exporter('getDecoratorDefinitionForMethod', ReflectUtil.getAnnotationDefinitionForMethod)
-        exporter('getDecoratorDefinitionForProperty', ReflectUtil.getAnnotationDefinitionForProperty)
-        exporter('getDecoratorDefinitionForMethodParameter', ReflectUtil.getAnnotationDefinitionForMethodParameter)
+        exporter('getDecoratorDefinitionForClass', ReflectUtil.getDecoratorDefinitionForClass)
+        exporter('getDecoratorDefinitionForMethod', ReflectUtil.getDecoratorDefinitionForMethod)
+        exporter('getDecoratorDefinitionForProperty', ReflectUtil.getDecoratorDefinitionForProperty)
+        exporter('getDecoratorDefinitionForMethodParameter', ReflectUtil.getDecoratorDefinitionForMethodParameter)
         exporter('getDecoratorDefinitionForClassParameter', ReflectUtil.getAnnotationDefinitionForClassParameter)
     });
 }

@@ -6,10 +6,10 @@ import {PropertyClassAnnotationBuilder} from './property-class-annotation-builde
 import {PropertyMethodAnnotationBuilder} from './property-method-annotation-builder';
 import {ParameterPropertyAnnotationBuilder} from '../parameter/parameter-property-annotation-builder';
 
-type PropertyDecoratorFactory<O> = (option: O) => PropertyDecorator;
+type PropertyAnnotation<O> = (option?: O) => PropertyDecorator;
 
 type PropertyAnnotationBuilder<O> = {
-    build(): PropertyDecoratorFactory<O>;
+    build(): PropertyAnnotation<O>;
     class(
         classHandler?: ClassHandler<O>
     ): PropertyClassAnnotationBuilder<O>;
@@ -64,4 +64,4 @@ type PropertyAnnotationBuilder<O> = {
 //
 // }
 
-export {PropertyDecoratorFactory, PropertyAnnotationBuilder};
+export {PropertyAnnotation, PropertyAnnotationBuilder};

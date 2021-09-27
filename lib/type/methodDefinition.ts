@@ -1,4 +1,4 @@
-import {AnnotationDefinition} from "./annotationDefinition";
+import {DecoratorDefinition} from "./decoratorDefinition";
 import {ParameterDefinition} from "./parameterDefinition";
 
 
@@ -13,7 +13,7 @@ export type MethodDefinition = {
      */
     name: string | symbol;
 
-    annotations: AnnotationDefinition[];
+    decorators: DecoratorDefinition[];
 
     isStatic: boolean;
 }

@@ -6,7 +6,7 @@ import {ParameterMethodAnnotationBuilder} from '../parameter/parameter-method-an
 import {MethodClassAnnotationBuilder} from './method-class-annotation-builder';
 import {PropertyMethodAnnotationBuilder} from '../property/property-method-annotation-builder';
 
-type MethodAnnotation<O> = (option: O) => MethodDecorator;
+type MethodAnnotation<O> = MethodDecorator & ((option?: O) => MethodDecorator);
 // type MethodDecoratorFactory<O> =
 //     O extends void ?
 //         (MethodDecorator & ((option: O) => MethodDecorator)) :

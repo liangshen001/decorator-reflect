@@ -5,7 +5,8 @@ import {MethodHandler} from '../../bean/method-handler';
 import {PropertyMethodClassAnnotationBuilder} from './property-method-class-annotation-builder';
 import {ParameterPropertyClassAnnotationBuilder} from '../parameter/parameter-property-class-annotation-builder';
 
-type PropertyClassAnnotation<O> = (option: O) => (PropertyDecorator & ClassDecorator);
+type PropertyClassDecorator = PropertyDecorator & ClassDecorator;
+type PropertyClassAnnotation<O> = PropertyClassDecorator & ((option?: O) => PropertyClassDecorator);
 
 type PropertyClassAnnotationBuilder<O> = {
     build(): PropertyClassAnnotation<O>;
@@ -68,4 +69,4 @@ type PropertyClassAnnotationBuilder<O> = {
 //
 // }
 
-export {PropertyClassAnnotation, PropertyClassAnnotationBuilder};
+export {PropertyClassAnnotation, PropertyClassAnnotationBuilder, PropertyClassDecorator};

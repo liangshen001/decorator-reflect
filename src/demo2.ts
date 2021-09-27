@@ -1,4 +1,4 @@
-import {AnnotationBuilder} from "../lib/annotation-builder/annotation-builder";
+import {DecoratorBuilder} from "../lib/annotation-builder/decorator-builder";
 import {ReflectUtil} from "../lib/util/reflect-util";
 
 const Test: ClassDecorator = (target) => {
@@ -8,7 +8,7 @@ const Test2: ClassDecorator = (target) => {
     // do something
 }
 
-const TestWrapper = AnnotationBuilder.create().class(Test).class(Test2).build();
+const TestWrapper = DecoratorBuilder.create().class(Test).class(Test2).build();
 
 @Test
 @Test2

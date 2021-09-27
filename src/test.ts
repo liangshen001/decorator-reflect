@@ -1,8 +1,8 @@
 
-import {AnnotationBuilder} from "../lib/annotation-builder/annotation-builder";
+import {DecoratorBuilder} from "../lib/annotation-builder/decorator-builder";
 import {ReflectUtil} from "../lib/util/reflect-util";
 
-const TestDecorator = AnnotationBuilder.create<string>().class().method().parameter().property().build();
+const TestDecorator = DecoratorBuilder.create<string>().class().method().parameter().property().build();
 
 @TestDecorator('test class option')
 export class Test {
