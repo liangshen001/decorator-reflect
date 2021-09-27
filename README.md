@@ -1,7 +1,7 @@
 # 装饰器构建 + 反射工具
 
 **更名为decorator-reflect**
-[decorator-reflect](https://www.npmjs.com/package/ts-decorator-reflect)
+[decorator-reflect](https://www.npmjs.com/package/decorator-reflect)
 
 **用于创建装饰器工厂（带参数的装饰器、装饰器工厂、 这里叫这个工厂为'注解'）, 合并现有的装饰器 ，并可以像java反射一样得到typescript中class信息（属性、方法、方法参数、以及它们的装饰器工厂（注解）和类型）**
 
