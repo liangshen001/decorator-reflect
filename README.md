@@ -150,5 +150,5 @@ console.log(ReflectUtil.getClassDefinition(TestClass));
 // }
 ```
 
-[中文](https://github.com/liangshen001/decorator-reflect/README-CN.md)
+[中文](https://github.com/liangshen001/decorator-reflect/blob/master/README-CN.md)
 
