@@ -10,7 +10,7 @@
 
 ### Typescript Demo
 
-[decorator-reflect-test](https://github.com/liangshen001/decorator-reflect/tree/master/demo/decorator-reflect/README.md)
+[ts-decorator-reflect-test](https://github.com/liangshen001/decorator-reflect/tree/master/demo/ts-decorator-reflect/README.md)
 
 * reflect-metadata@0.1.13
 * typescript@4.4.3
