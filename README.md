@@ -27,6 +27,12 @@
 npm i decorator-reflect -s
 ```
 
+## API
+
+```typescript
+import {ReflectUtil, DecoratorBuilder} from "decorator-reflect";
+```
+
 ## Usage
 
 ### Basic Usage
