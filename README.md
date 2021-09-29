@@ -10,13 +10,13 @@
 
 ### Typescript Demo
 
-[ts-decorator-reflect-test](https://github.com/liangshen001/decorator-reflect/tree/master/demo/ts-decorator-reflect/README.md)
+[ts-decorator-reflect-test](https://github.com/liangshen001/decorator-reflect/tree/master/demo/ts-decorator-reflect)
 
 * reflect-metadata@0.1.13
 * typescript@4.4.3
 
 ### Javascript Demo
-[js-decorator-reflect-test](https://github.com/liangshen001/decorator-reflect/tree/master/demo/js-decorator-reflect/README.md)
+[js-decorator-reflect-test](https://github.com/liangshen001/decorator-reflect/tree/master/demo/js-decorator-reflect)
 
 * reflect-metadata@0.1.13
 * babel v7+
