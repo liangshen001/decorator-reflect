@@ -6,7 +6,7 @@
 
 ## 安装
 ```
-npm i ts-decorator-reflect -s
+npm i decorator-reflect -s
 ```
 
 ## 使用方法
@@ -14,7 +14,7 @@ npm i ts-decorator-reflect -s
 ### 基本使用方法
 
 ```typescript
-import {DecoratorBuilder, ReflectUtil} from "ts-decorator-reflect";
+import {DecoratorBuilder, ReflectUtil} from "decorator-reflect";
 
 const TestAnnotation = DecoratorBuilder.create<string>()
     .class((target, option, paramTypes) => {
@@ -65,7 +65,7 @@ class TestClass {
 ```
 ### 合并多个已有装饰器
 ```typescript
-import {DecoratorBuilder, ReflectUtil} from "ts-decorator-reflect";
+import {DecoratorBuilder, ReflectUtil} from "decorator-reflect";
 const Test: ClassDecorator = (target) => {
     // do something
 }
@@ -100,7 +100,7 @@ console.log(ReflectUtil.getClassDefinition(TestClass));
 
 #### typescript
 
-[ts-decorator-reflect-test](https://github.com/liangshen001/decorator-reflect/tree/master/demo/ts-decorator-reflect/README.md)
+[decorator-reflect-test](https://github.com/liangshen001/decorator-reflect/tree/master/demo/decorator-reflect/README.md)
 
 * node v12
 * reflect-metadata
