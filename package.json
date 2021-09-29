@@ -1,6 +1,6 @@
 {
   "name": "decorator-reflect",
-  "version": "2.3.4",
+  "version": "2.3.5",
   "description": "装饰器反射库",
   "main": "dist/index.js",
   "author": {
