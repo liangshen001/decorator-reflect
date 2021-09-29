@@ -1,10 +1,10 @@
-# Decorator build + reflection tool
+# 装饰器构建 + 反射工具
 
-**Use to create decorators or decorator factories (decorators with parameters), merge existing decorators, and get typescript class information (properties, methods, method parameters < limited typescript>, and their decorators and types < limited typescript>) just like Java reflection does.**
+**用于创建装饰器或装饰器工厂（带参数的装饰器）, 合并现有的装饰器 ，并可以像java反射一样得到typescript中class信息（属性、方法、方法参数<限typescript>、以及它们的装饰器和类型<限typescript>）**
 
-**The DecoratorBuilder build shows how to use @Test() or @Test when the factory of the decorator has no arguments**
+**DecoratorBuilder build出来的是装饰器的工厂 无参时的使用方法 @Test() 或 @Test**
 
-## Environment
+## 环境
 
 * node v12
 
@@ -22,14 +22,14 @@
 * babel v7+
 * babel-plugin-parameter-decorator@0.1.13
 
-## Installation
+## 安装
 ```
 npm i decorator-reflect -s
 ```
 
-## Usage
+## 使用方法
 
-### Basic Usage
+### 基本使用方法
 
 ```typescript
 import {ReflectUtil, DecoratorBuilder} from "decorator-reflect";
@@ -109,10 +109,10 @@ class TestClass {
         return true;
     }
 }
-// Get reflection information
+// 获取反射信息
 // console.log(ReflectUtil.getClassDefinition(TestClass));
 ```
-### Merge multiple existing decorators
+### 合并多个已有装饰器
 ```typescript
 import {DecoratorBuilder, ReflectUtil} from "decorator-reflect";
 const Test: ClassDecorator = (target) => {
@@ -143,6 +143,4 @@ console.log(ReflectUtil.getClassDefinition(TestClass));
 //     parameters: ParameterDefinition[];
 // }
 ```
-
-[中文](https://github.com/liangshen001/decorator-reflect/README-CN.md)
 
