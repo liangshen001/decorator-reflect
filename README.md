@@ -100,17 +100,21 @@ console.log(ReflectUtil.getClassDefinition(TestClass));
 
 #### typescript
 
-[ts-decorator-reflect-test](https://www.npmjs.com/package/decorator-reflect-test)
+[ts-decorator-reflect-test](https://github.com/liangshen001/decorator-reflect/tree/master/demo/ts-decorator-reflect/README.md)
 
 * node v12
 * reflect-metadata
+* decorator-reflect
 * typescript
-* ts-node@8.3.0
 
 #### javascript babel
-[js-decorator-reflect-test](https://www.npmjs.com/package/decorator-reflect-test)
+[js-decorator-reflect-test](https://github.com/liangshen001/decorator-reflect/tree/master/demo/js-decorator-reflect/README.md)
 
+* node v12
+* reflect-metadata
+* decorator-reflect
 * babel7
+* babel-plugin-parameter-decorator
 
 
 **注意：有一些情况不会被反射出来**

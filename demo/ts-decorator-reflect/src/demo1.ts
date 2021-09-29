@@ -1,18 +1,48 @@
 import {ReflectUtil, DecoratorBuilder} from "decorator-reflect";
 
-const Log = DecoratorBuilder.create(123).class((target) => {
-}).method((target, propertyKey, descriptor, option) => {
-}).build();
+const Log = DecoratorBuilder.create()
+    .method((target, propertyKey, descriptor, option) => ({
+        ...descriptor,
+        value: function(...args: object[]) {
+            console.time();
+            try {
+                console.log('call method:', propertyKey, ', paramaters:', args);
+                const returnValue = descriptor.value.apply(this, args)
+                console.log('call method:', propertyKey, ', return:', returnValue);
+                return returnValue;
+            } finally {
+                console.timeEnd();
+            }
+        }
+    })).build();
 
-@Log(342)
 class Demo1Class {
-    constructor(a: number) {
+    constructor() {
     }
-    @Log(342)
+    @Log()
     public method() {
-        console.log('call method')
+        return 'test';
     }
 }
 
-console.log(ReflectUtil.getClassDefinition(Demo1Class));
+new Demo1Class().method()
+
+interface Fish {
+    fish: string
+}
+interface Water {
+    water: string
+}
+interface Bird {
+    bird: string
+}
+interface Sky {
+    sky: string
+}
+//naked type
+type Condition<T> = T extends Fish ? Water : Sky;
+
+
+let condition1: Condition<Fish | Bird> = { water: '水', sky: '' };
+let condition2: Condition<Fish | Bird> = { sky: '天空' };
 
