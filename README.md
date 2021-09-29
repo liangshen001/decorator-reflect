@@ -4,6 +4,27 @@
 
 **DecoratorBuilder build出来的是装饰器的工厂 无参时的使用方法 @Test() 或 @Test**
 
+## 环境
+
+* node v12
+
+### typescript demo
+
+[decorator-reflect-test](https://github.com/liangshen001/decorator-reflect/tree/master/demo/decorator-reflect/README.md)
+
+* reflect-metadata
+* decorator-reflect
+* typescript
+
+### javascript demo
+[js-decorator-reflect-test](https://github.com/liangshen001/decorator-reflect/tree/master/demo/js-decorator-reflect/README.md)
+
+* node v12
+* reflect-metadata
+* decorator-reflect
+* babel7
+* babel-plugin-parameter-decorator
+
 ## 安装
 ```
 npm i decorator-reflect -s
@@ -94,27 +115,6 @@ console.log(ReflectUtil.getClassDefinition(TestClass));
 //     parameters: ParameterDefinition[];
 // }
 ```
-
-
-### 环境
-
-#### typescript
-
-[decorator-reflect-test](https://github.com/liangshen001/decorator-reflect/tree/master/demo/decorator-reflect/README.md)
-
-* node v12
-* reflect-metadata
-* decorator-reflect
-* typescript
-
-#### javascript babel
-[js-decorator-reflect-test](https://github.com/liangshen001/decorator-reflect/tree/master/demo/js-decorator-reflect/README.md)
-
-* node v12
-* reflect-metadata
-* decorator-reflect
-* babel7
-* babel-plugin-parameter-decorator
 
 
 **注意：有一些情况不会被反射出来**
