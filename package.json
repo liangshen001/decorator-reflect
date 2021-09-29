@@ -1,5 +1,5 @@
 {
-  "name": "ts-decorator-reflect",
+  "name": "decorator-reflect",
   "version": "2.2.0",
   "description": "装饰器反射库",
   "main": "dist/index.js",
@@ -25,6 +25,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "start": "ts-node ./src/test.ts",
+    "build": "tsc",
     "release": "tsc && npm version patch && npm publish",
     "release:minor": "tsc && npm version minor && npm publish",
     "release:major": "tsc && npm version major && npm publish"
@@ -37,7 +38,7 @@
   "devDependencies": {
     "reflect-metadata": "^0.1.13",
     "tslint": "~5.9.1",
-    "typescript": "^3.5.3",
+    "typescript": "^3.7.2",
     "ts-node": "^8.3.0"
   }
 }

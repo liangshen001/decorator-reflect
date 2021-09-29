@@ -1,6 +1,4 @@
-import {DecoratorBuilder} from "../lib/annotation-builder/decorator-builder";
-import {ReflectUtil} from "../lib/util/reflect-util";
-import {ReflectMetadataUtil} from "../lib/util/reflect-metadata-util";
+import {ReflectUtil, DecoratorBuilder} from "decorator-reflect";
 
 const Log = DecoratorBuilder.create(123).class((target) => {
 }).method((target, propertyKey, descriptor, option) => {

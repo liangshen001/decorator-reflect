@@ -1,11 +1,9 @@
-
-import {DecoratorBuilder} from "../lib/annotation-builder/decorator-builder";
-import {ReflectUtil} from "../lib/util/reflect-util";
+import {ReflectUtil, DecoratorBuilder} from "decorator-reflect";
 
 const TestDecorator = DecoratorBuilder.create<string>().class().method().parameter().property().build();
 
 @TestDecorator('test class option')
-export class Test {
+export class Demo3 {
 
     @TestDecorator('pro1 property option')
     private pro: string = '';
@@ -30,7 +28,7 @@ export class Test {
     }
 }
 
-console.log(ReflectUtil.getMethodDefinition(Test, 'method1'));
+console.log(ReflectUtil.getMethodDefinition(Demo3, 'method1'));
 // {
 //     name: 'method1',
 //     annotations: [ { type: [Function], option: 'method1 option' } ],
@@ -39,7 +37,7 @@ console.log(ReflectUtil.getMethodDefinition(Test, 'method1'));
 //     isStatic: false
 // }
 
-console.log(ReflectUtil.getClassDefinition(Test));
+console.log(ReflectUtil.getClassDefinition(Demo3));
 
 // console.log(ReflectUtil.getMethodDefinition(Test, 'method1'));
 // console.log(ReflectUtil.getDecoratorDefinitionForMethodParameter(Test, 'method1', 0, TestDecorator))

@@ -30,7 +30,7 @@ export class ReflectUtil {
 
     public static getParameterDefinitionForClass<T extends Function>(target: T, index: number): ParameterDefinition | undefined {
         let classDefinition = ReflectUtil.getClassDefinition(target);
-        return classDefinition.parameters.find((i, _index) => index === _index);
+        return classDefinition?.parameters?.find((i, _index) => index === _index);
     }
 
     public static getPropertyDefinition<T extends Function>(target: T, name: string): PropertyDefinition | undefined {
@@ -40,7 +40,7 @@ export class ReflectUtil {
 
     public static getParameterDefinitionForMethod<T extends Function>(target: T, name: string, index: number): ParameterDefinition | undefined {
         let methodDefinition = ReflectUtil.getMethodDefinition(target, name);
-        return methodDefinition?.parameters.find((i, _index) => index === _index);
+        return methodDefinition?.parameters?.find((i, _index) => index === _index);
     }
 
     public static getDecoratorDefinitionForClass<T extends Function>(target: T, decorator: Function): DecoratorDefinition | undefined {

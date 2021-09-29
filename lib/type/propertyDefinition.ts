@@ -5,7 +5,7 @@ export type PropertyDefinition = {
     /**
      * 属性类型
      */
-    type: Function;
+    type?: Function;
     /**
      * 属性名称
      */

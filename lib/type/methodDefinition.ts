@@ -6,7 +6,7 @@ export type MethodDefinition = {
     /**
      * 方法返回类型
      */
-    returnType: Function;
+    returnType?: Function;
     parameters: ParameterDefinition[];
     /**
      * 方法名称

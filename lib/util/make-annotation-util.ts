@@ -184,12 +184,14 @@ export class MakeAnnotationUtil {
         }
 
         if (options.class) {
-            const paramTypes = ReflectMetadataUtil.getParamsTypes(classType);
             classInfo.decorators.push(options.class.decorator);
-            classInfo.parameters = paramTypes?.map(type => ({
-                decorators: [],
-                type: type
-            }));
+            if (!classInfo.parameters) {
+                const paramTypes = ReflectMetadataUtil.getParamsTypes(classType);
+                classInfo.parameters = paramTypes.map(type => ({
+                    decorators: [],
+                    type: type
+                }));
+            }
         } else if (options.method) {
             if (options.method.propertyKey === undefined) {
                 if (options.method.parameter) {
@@ -201,18 +203,24 @@ export class MakeAnnotationUtil {
                         }));
                     }
                     const parameter = classInfo.parameters[options.method.parameter.index];
-                    parameter.decorators.push(options.method.parameter.decorator);
+                    if (parameter) {
+                        parameter.decorators.push(options.method.parameter.decorator);
+                    } else {
+                        classInfo.parameters[options.method.parameter.index] = {
+                            decorators: [options.method.parameter.decorator]
+                        }
+                    }
                 }
             } else {
-                let method = classInfo.methods.find(method => method.name == options.method!.propertyKey);
+                let method = classInfo.methods.find(method => method.name === options.method!.propertyKey);
                 if (!method) {
-                    const paramtypes = ReflectMetadataUtil.getParamsTypes(target, options.method.propertyKey);
-                    const returntype = ReflectMetadataUtil.getReturnType(target, options.method.propertyKey);
+                    const paramTypes = ReflectMetadataUtil.getParamsTypes(target, options.method.propertyKey);
+                    const returnType = ReflectMetadataUtil.getReturnType(target, options.method.propertyKey);
                     method = {
                         name: options.method.propertyKey,
                         decorators: [],
-                        returnType: returntype,
-                        parameters: paramtypes.map(type => ({
+                        returnType: returnType,
+                        parameters: paramTypes.map(type => ({
                             decorators: [],
                             type: type
                         })),
@@ -226,7 +234,13 @@ export class MakeAnnotationUtil {
 
                 if (options.method.parameter) {
                     const parameter = method.parameters[options.method.parameter.index];
-                    parameter.decorators.push(options.method.parameter.decorator);
+                    if (parameter) {
+                        parameter.decorators.push(options.method.parameter.decorator);
+                    } else {
+                        method.parameters[options.method.parameter.index] = {
+                            decorators: [options.method.parameter.decorator]
+                        }
+                    }
                 }
             }
         } else if (options.property) {

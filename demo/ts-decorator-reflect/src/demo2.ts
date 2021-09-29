@@ -1,5 +1,4 @@
-import {DecoratorBuilder} from "../lib/annotation-builder/decorator-builder";
-import {ReflectUtil} from "../lib/util/reflect-util";
+import {ReflectUtil, DecoratorBuilder} from "decorator-reflect";
 
 const Test: ClassDecorator = (target) => {
     // do something

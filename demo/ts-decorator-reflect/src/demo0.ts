@@ -1,5 +1,4 @@
-import {DecoratorBuilder} from "../lib/annotation-builder/decorator-builder";
-import {ReflectUtil} from "../lib/util/reflect-util";
+import {ReflectUtil, DecoratorBuilder} from "decorator-reflect";
 
 /**
  * 创建装饰器工厂 TestAnnotation

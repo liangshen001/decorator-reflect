@@ -1,6 +1,6 @@
 import {DecoratorDefinition} from "./decoratorDefinition";
 
 export type ParameterDefinition = {
-    type: Function;
+    type?: Function;
     decorators: DecoratorDefinition[];
 }
