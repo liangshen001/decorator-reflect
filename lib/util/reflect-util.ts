@@ -17,7 +17,7 @@ export class ReflectUtil {
      * @param propertyKey
      * @param parameterIndex
      */
-    public static getDecoratorOption<O, T extends Function>(decorator: Annotation<O>, target: T, propertyKey?: string, parameterIndex?: number): O | undefined {
+    public static getDecoratorOption<O>(decorator: Annotation<O>, target: Function, propertyKey?: string, parameterIndex?: number): O | undefined {
         let decoratorPayloadDefinition;
         const classDefinition = ReflectUtil.getClassDefinition(target);
         if (propertyKey) {
