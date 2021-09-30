@@ -4,10 +4,11 @@ import {ClassHandler} from '../../bean/class-handler';
 import {MethodHandler} from '../../bean/method-handler';
 import {ParameterPropertyMethodAnnotationBuilder} from './parameter-property-method-annotation-builder';
 import {ParameterPropertyClassAnnotationBuilder} from './parameter-property-class-annotation-builder';
+import {Annotation} from "../../bean/annotation";
 
 
 type ParameterPropertyDecorator = ParameterDecorator & PropertyDecorator;
-type ParameterPropertyAnnotation<O> = ((option?: O) => ParameterPropertyDecorator) & ParameterPropertyDecorator
+type ParameterPropertyAnnotation<O> = ((option?: O) => ParameterPropertyDecorator) & ParameterPropertyDecorator & Annotation<O>
 
 type ParameterPropertyAnnotationBuilder<O> = {
     build(): ParameterPropertyAnnotation<O>;

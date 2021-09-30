@@ -1,8 +1,8 @@
-import {ClassDefinition} from "./type/classDefinition";
-import {MethodDefinition} from "./type/methodDefinition";
-import {ParameterDefinition} from "./type/parameterDefinition";
-import {PropertyDefinition} from "./type/propertyDefinition";
-import {DecoratorDefinition} from "./type/decoratorDefinition";
+import {ClassDefinition} from "./type/class-definition";
+import {MethodDefinition} from "./type/method-definition";
+import {ParameterDefinition} from "./type/parameter-definition";
+import {PropertyDefinition} from "./type/property-definition";
+import {DecoratorDefinition} from "./type/decorator-definition";
 import {ReflectUtil} from "./util/reflect-util";
 
 export namespace Reflect {

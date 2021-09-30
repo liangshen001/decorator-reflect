@@ -28,7 +28,7 @@ export class Demo3 {
     }
 }
 
-console.log(ReflectUtil.getMethodDefinition(Demo3, 'method1'));
+console.log(ReflectUtil.getDefinition(Demo3, 'method1'));
 // {
 //     name: 'method1',
 //     annotations: [ { type: [Function], option: 'method1 option' } ],
@@ -37,7 +37,7 @@ console.log(ReflectUtil.getMethodDefinition(Demo3, 'method1'));
 //     isStatic: false
 // }
 
-console.log(ReflectUtil.getClassDefinition(Demo3));
+console.log(ReflectUtil.getDefinition(Demo3));
 
 // console.log(ReflectUtil.getMethodDefinition(Test, 'method1'));
 // console.log(ReflectUtil.getDecoratorDefinitionForMethodParameter(Test, 'method1', 0, TestDecorator))

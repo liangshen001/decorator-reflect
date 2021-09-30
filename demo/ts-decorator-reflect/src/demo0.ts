@@ -34,6 +34,9 @@ const TestAnnotation = DecoratorBuilder.create<string>()
         console.log(returnType); // [Function: Boolean]
     })).build();
 
+const Test = DecoratorBuilder.create(222).class().build();
+
+@Test()
 @TestAnnotation('test class')
 class TestClass {
 
@@ -48,4 +51,4 @@ class TestClass {
     }
 }
 // 获取反射信息
-console.log(ReflectUtil.getClassDefinition(TestClass));
+console.log(ReflectUtil.getDefinition(TestClass));

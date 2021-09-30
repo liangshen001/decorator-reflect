@@ -1,7 +1,7 @@
 import {ReflectUtil, DecoratorBuilder} from "decorator-reflect";
 
 const Log = DecoratorBuilder.create()
-    .method((target, propertyKey, descriptor, option) => ({
+    .method((target, propertyKey, descriptor) => ({
         ...descriptor,
         value: function(...args: object[]) {
             console.time();
@@ -19,11 +19,11 @@ const Log = DecoratorBuilder.create()
 class Demo1Class {
     constructor() {
     }
-    @Log()
-    public method() {
+    @Log
+    public method(b: string) {
         return 'test';
     }
 }
 
-new Demo1Class().method()
+new Demo1Class().method('');
 

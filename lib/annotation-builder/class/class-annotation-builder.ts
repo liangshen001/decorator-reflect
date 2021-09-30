@@ -5,8 +5,9 @@ import {MethodHandler} from '../../bean/method-handler';
 import {MethodClassAnnotationBuilder} from '../method/method-class-annotation-builder';
 import {PropertyClassAnnotationBuilder} from '../property/property-class-annotation-builder';
 import {ParameterClassAnnotationBuilder} from '../parameter/parameter-class-annotation-builder';
+import {Annotation} from "../../bean/annotation";
 
-type ClassAnnotation<O> = (option?: O) => ClassDecorator;
+type ClassAnnotation<O> = ((option?: O) => ClassDecorator) & Annotation<O>;
 // type ClassDecoratorFactory<O> =
 //     O extends void ?
 //         (ClassDecorator & (() => ClassDecorator)) :

@@ -116,7 +116,7 @@ class TestClass {
     }
 }
 // Get reflection information
-// console.log(ReflectUtil.getClassDefinition(TestClass));
+// console.log(ReflectUtil.getDefinition(TestClass));
 ```
 ### Merge multiple existing decorators
 ```typescript
@@ -139,11 +139,11 @@ class TestClass {
     test() {}
 }
 
-console.log(ReflectUtil.getClassDefinition(TestClass));
+console.log(ReflectUtil.getDefinition(TestClass));
 // export type ClassDefinition<T extends Function> = {
 //     name: string;
 //     type: T;
-//     annotations: AnnotationDefinition[];
+//     decorators: DecoratorDefinition[];
 //     properties: PropertyDefinition[];
 //     methods: MethodDefinition[];
 //     parameters: ParameterDefinition[];

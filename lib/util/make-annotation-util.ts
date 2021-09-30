@@ -2,16 +2,18 @@ import {MethodHandler} from "../bean/method-handler";
 import {PropertyHandler} from "../bean/property-handler";
 import {ClassHandler} from "../bean/class-handler";
 import {ParameterHandler} from "../bean/parameter-handler";
-import {DecoratorDefinition} from "../type/decoratorDefinition";
-import {ClassDefinition} from "../type/classDefinition";
+import {DecoratorDefinition} from "../type/decorator-definition";
+import {ClassDefinition} from "../type/class-definition";
 import {ReflectMetadataUtil} from "./reflect-metadata-util";
+import {MethodDefinition} from "../type/method-definition";
+import {ParameterDefinition} from "../type/parameter-definition";
+import {PropertyDefinition} from "../type/property-definition";
+import {ReflectUtil} from "./reflect-util";
 
 /**
  * 构建装饰器工具类
  */
 export class MakeAnnotationUtil {
-
-    public static classesMap = new Map<Function, ClassDefinition<any>>();
 
     public static getParameterPropertyKey(propertyKey: string | symbol, parameterIndex: number) {
         propertyKey = propertyKey ? propertyKey : '&constructor';
@@ -43,7 +45,8 @@ export class MakeAnnotationUtil {
             return MakeAnnotationUtil.makeClassDecorator<O>(
                 classHandlers, metadataKey, decoratorFactory)(option)(args[0]);
         } else if (args.length === 3) {
-            if (args[2] === undefined) {
+            //      || 这里babel propertyDecorator有第三个参数 有值 值中有initializer属性 因为适配
+            if (args[2] === undefined || args[2].initializer) {
                 // 外理属性装饰器
                 return MakeAnnotationUtil.makePropertyDecorator<O>(
                     propertyHandlers, metadataKey, decoratorFactory)(option)(args[0], args[1]);
@@ -109,154 +112,22 @@ export class MakeAnnotationUtil {
 
                 Reflect.defineMetadata(metadataKey, option, target, propertyKey);
                 /***********************************************设置methodinfo************************************************/
-                this.pushClass(target, {
-                    method: {
-                        decorator: {
-                            type: factory,
-                            option
-                        },
-                        propertyKey
-                    }
-                });
-                if (handlers.length) {
-                    const paramTypes = ReflectMetadataUtil.getParamsTypes(target, propertyKey);
-                    const returnType = ReflectMetadataUtil.getReturnType(target, propertyKey);
-                    return handlers.reduce((p, v) => {
-                        const p2 = v(target, <string> propertyKey, p, option, typeof target === 'function', paramTypes, returnType);
-                        return p2 || p;
-                    }, descriptor);
-                }
-                // if (handler) {
-                //     const paramTypes = ReflectMetadataUtil.getParamsTypes(target, propertyKey);
-                //     const returnType = ReflectMetadataUtil.getReturnType(target, propertyKey);
-                //     return handler(target, <string> propertyKey, descriptor, option, paramTypes, returnType);
-                // }
-                return descriptor;
-            };
-    }
+                const paramTypes = ReflectMetadataUtil.getParamsTypes(target, propertyKey);
+                const returnType = ReflectMetadataUtil.getReturnType(target, propertyKey);
 
-    /**
-     * 保存类的相关信息用于反射
-     * @param target
-     * @param options
-     */
-    private static pushClass(target: Object, options: {
-        method?: {
-            propertyKey: string | symbol;
-            decorator?: DecoratorDefinition;
-            parameter?: {
-                decorator: DecoratorDefinition;
-                index: number;
-            }
-        };
-        property?: {
-            decorator: DecoratorDefinition;
-            propertyKey: string | symbol;
-        };
-        class?: {
-            decorator: DecoratorDefinition;
-        };
+                const classInfo = ReflectUtil.getDefinition(target);
 
-    }) {
-        let isStatic;
-        let classType;
-        if (target instanceof Function) {
-            isStatic = true;
-            classType = target;
-        } else {
-            isStatic = false;
-            classType = target.constructor;
-        }
-
-        let classInfo: ClassDefinition<Function>;
-        if (this.classesMap.has(classType)) {
-            classInfo = this.classesMap.get(classType)!;
-        } else {
-            classInfo = {
-                decorators: [],
-                methods: [],
-                properties: [],
-                name: classType.name,
-                type: classType,
-                parameters: [],
-            };
-            this.classesMap.set(classType, classInfo);
-        }
-
-        if (options.class) {
-            classInfo.decorators.push(options.class.decorator);
-            if (!classInfo.parameters) {
-                const paramTypes = ReflectMetadataUtil.getParamsTypes(classType);
-                classInfo.parameters = paramTypes.map(type => ({
-                    decorators: [],
-                    type: type
-                }));
-            }
-        } else if (options.method) {
-            if (options.method.propertyKey === undefined) {
-                if (options.method.parameter) {
-                    if (!classInfo.parameters.length) {
-                        const paramTypes = ReflectMetadataUtil.getParamsTypes(classType);
-                        classInfo.parameters = paramTypes.map(type => ({
-                            decorators: [],
-                            type: type
-                        }));
-                    }
-                    const parameter = classInfo.parameters[options.method.parameter.index];
-                    if (parameter) {
-                        parameter.decorators.push(options.method.parameter.decorator);
-                    } else {
-                        classInfo.parameters[options.method.parameter.index] = {
-                            decorators: [options.method.parameter.decorator]
-                        }
-                    }
-                }
-            } else {
-                let method = classInfo.methods.find(method => method.name === options.method!.propertyKey);
+                let method = classInfo.methods.find(method => method.name === propertyKey);
                 if (!method) {
-                    const paramTypes = ReflectMetadataUtil.getParamsTypes(target, options.method.propertyKey);
-                    const returnType = ReflectMetadataUtil.getReturnType(target, options.method.propertyKey);
-                    method = {
-                        name: options.method.propertyKey,
-                        decorators: [],
-                        returnType: returnType,
-                        parameters: paramTypes.map(type => ({
-                            decorators: [],
-                            type: type
-                        })),
-                        isStatic
-                    };
-                    classInfo.methods.push(method);
+                    method = classInfo.addMethod(target, propertyKey, paramTypes, returnType);
                 }
-                if (options.method.decorator) {
-                    method.decorators.push(options.method.decorator);
-                }
+                method.addDecorator(new DecoratorDefinition(factory, option));
 
-                if (options.method.parameter) {
-                    const parameter = method.parameters[options.method.parameter.index];
-                    if (parameter) {
-                        parameter.decorators.push(options.method.parameter.decorator);
-                    } else {
-                        method.parameters[options.method.parameter.index] = {
-                            decorators: [options.method.parameter.decorator]
-                        }
-                    }
-                }
-            }
-        } else if (options.property) {
-            let property = classInfo.properties.find(property => property.name == options.property!.propertyKey);
-            if (!property) {
-                const type = ReflectMetadataUtil.getType(target, options.property.propertyKey);
-                property = {
-                    type,
-                    decorators: [],
-                    name: options.property.propertyKey,
-                    isStatic
-                };
-                classInfo.properties.push(property);
-            }
-            property.decorators.push(options.property.decorator);
-        }
+                return handlers.reduce((p, v) => {
+                    const p2 = v(target, <string>propertyKey, p, option, target instanceof Function, paramTypes, returnType);
+                    return p2 || p;
+                }, descriptor);
+            };
     }
 
     /**
@@ -265,7 +136,6 @@ export class MakeAnnotationUtil {
      * @param metadataKey
      * @param factory
      */
-
     private static makePropertyDecorator<O>(
         handlers: PropertyHandler<O>[],
         metadataKey?: string | symbol,
@@ -275,17 +145,15 @@ export class MakeAnnotationUtil {
             (target, propertyKey) => {
                 Reflect.defineMetadata(metadataKey, option, target, propertyKey);
                 /********************************************************************************************************/
-                this.pushClass(target, {
-                    property: {
-                        decorator: {
-                            type: factory,
-                            option
-                        },
-                        propertyKey
-                    }
-                });
+                const type = ReflectMetadataUtil.getType(target, propertyKey);
+                const classInfo = ReflectUtil.getDefinition(target);
+                let property = classInfo.properties.find(property => property.name == propertyKey);
+                if (!property) {
+                    property = classInfo.addProperty(target, propertyKey, type);
+                }
+                property.addDecorator(new DecoratorDefinition(factory, option));
+
                 if (handlers.length) {
-                    const type = ReflectMetadataUtil.getType(target, propertyKey);
                     handlers.forEach(handler => {
                         handler(target, <string>propertyKey, option, typeof target === 'function', type);
                     });
@@ -309,23 +177,16 @@ export class MakeAnnotationUtil {
         return option =>
             <TFunction extends Function>(target: TFunction) => {
                 Reflect.defineMetadata(metadataKey, option, target);
-                this.pushClass(target, {
-                    class: {
-                        decorator: {
-                            type: decorator,
-                            option
-                        }
-                    }
-                });
+                const paramTypes = ReflectMetadataUtil.getParamsTypes(target);
 
-                if (handlers.length) {
-                    const paramTypes = ReflectMetadataUtil.getParamsTypes(target);
-                    return handlers.reduce((p, v) => {
-                        const p2 = (<any>v)(p, option, paramTypes);
-                        return p2 || p;
-                    }, target)
-                }
-                return target;
+                const classInfo = ReflectUtil.getDefinition(target);
+                classInfo.addDecorator(new DecoratorDefinition(decorator, option));
+                classInfo.resetParameters(paramTypes);
+
+                return handlers.reduce((p, v) => {
+                    const p2 = v(p, option, paramTypes);
+                    return p2 || p;
+                }, target)
             };
     }
 
@@ -344,30 +205,30 @@ export class MakeAnnotationUtil {
             (target, propertyKey, parameterIndex) => {
                 const key = MakeAnnotationUtil.getParameterPropertyKey(propertyKey, parameterIndex);
                 Reflect.defineMetadata(metadataKey, option, target, key);
-                this.pushClass(target, {
-                    method: {
-                        parameter: {
-                            decorator: {
-                                type: factory,
-                                // metadataValue,
-                                option
-                            },
-                            index: parameterIndex
-                        },
-                        propertyKey
-                    }
-                });
 
-                if (handlers.length) {
-                    const paramTypes = ReflectMetadataUtil.getParamsTypes(target, propertyKey);
-                    handlers.forEach(handler => {
-                        handler(target, <string> propertyKey, parameterIndex, option, paramTypes[parameterIndex]);
-                    });
-                    // return handlers.reduce((p, v) => {
-                    //     const p2 = v(target, <string> propertyKey, p, option, paramTypes, returnType);
-                    //     return p2 || p;
-                    // }, descriptor);
+                const paramTypes = ReflectMetadataUtil.getParamsTypes(target, propertyKey);
+                const returnType = ReflectMetadataUtil.getReturnType(target, propertyKey);
+
+                const classInfo = ReflectUtil.getDefinition(target);
+                const decoratorDefinition = new DecoratorDefinition(factory, option);
+                if (propertyKey === undefined) {
+                    classInfo.resetParameters(paramTypes);
+                    classInfo.setParameterDecorator(parameterIndex, decoratorDefinition);
+                } else {
+                    let method = classInfo.methods.find(method => method.name === propertyKey);
+                    if (!method) {
+                        method = classInfo.addMethod(target, propertyKey, paramTypes, returnType);
+                    }
+                    method.setParameterDecorator(parameterIndex, decoratorDefinition);
                 }
+
+                handlers.forEach(handler => {
+                    handler(target, <string>propertyKey, parameterIndex, option, paramTypes && paramTypes[parameterIndex]);
+                });
+                // return handlers.reduce((p, v) => {
+                //     const p2 = v(target, <string> propertyKey, p, option, paramTypes, returnType);
+                //     return p2 || p;
+                // }, descriptor);
 
                 // if (handler) {
                 //     handler(target, <string> propertyKey, parameterIndex, option, paramtypes[parameterIndex]);

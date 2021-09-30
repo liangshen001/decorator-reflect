@@ -17,6 +17,6 @@ class DemoClass {
 @TestWrapper()
 class Demo2Class {
 }
-console.log(ReflectUtil.getClassDefinition(Demo2Class));
+console.log(ReflectUtil.getDefinition(Demo2Class));
 
 
