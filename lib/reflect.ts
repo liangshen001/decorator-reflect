@@ -4,6 +4,7 @@ import {ParameterDefinition} from "./type/parameter-definition";
 import {PropertyDefinition} from "./type/property-definition";
 import {DecoratorDefinition} from "./type/decorator-definition";
 import {ReflectUtil} from "./util/reflect-util";
+import {Annotation} from "./bean/annotation";
 
 export namespace Reflect {
     /**
@@ -120,4 +121,6 @@ export namespace Reflect {
         exporter('getDecoratorDefinitionForClassParameter', ReflectUtil.getAnnotationDefinitionForClassParameter)
     });
 }
+
+
 

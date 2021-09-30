@@ -6,59 +6,20 @@ import {ParameterMethodAnnotationBuilder} from './parameter-method-annotation-bu
 import {ParameterClassAnnotationBuilder} from './parameter-class-annotation-builder';
 import {ParameterPropertyAnnotationBuilder} from './parameter-property-annotation-builder';
 import {Annotation} from "../../bean/annotation";
+import {MethodClassDecorator} from "../method/method-class-annotation-builder";
 
-type ParameterAnnotation<O> = ParameterDecorator & ((option?: O) => ParameterDecorator) & Annotation<O>;
+type ParameterAnnotation<O, P> = (P extends void ? ParameterDecorator : void) & ((option: P) => ParameterDecorator) & Annotation<O, P>;
 
-type ParameterAnnotationBuilder<O> = {
-    build(): ParameterAnnotation<O>;
+type ParameterAnnotationBuilder<O, P> = {
+    build(): ParameterAnnotation<O, P>;
     parameter(
         parameterHandler?: ParameterHandler<O>
-    ): ParameterAnnotationBuilder<O>;
+    ): ParameterAnnotationBuilder<O, P>;
     method(
         methodHandler?: MethodHandler<O>
-    ): ParameterMethodAnnotationBuilder<O>;
-    class(classHandler?: ClassHandler<O>): ParameterClassAnnotationBuilder<O>;
-    property(propertyHandler?: PropertyHandler<O>): ParameterPropertyAnnotationBuilder<O>;
+    ): ParameterMethodAnnotationBuilder<O, P>;
+    class(classHandler?: ClassHandler<O>): ParameterClassAnnotationBuilder<O, P>;
+    property(propertyHandler?: PropertyHandler<O>): ParameterPropertyAnnotationBuilder<O, P>;
 }
-
-// class ParameterAnnotationBuilder2<O> extends AbstractAnnotationBuilder<O> {
-//
-//     constructor(
-//         public defaultOption: O | ((o: O) => O) | undefined,
-//         public metadataKey: string | symbol | undefined,
-//         public parameterHandlers: ParameterHandler<O>[]
-//     ) {
-//         super(defaultOption, metadataKey);
-//     }
-//
-//     public build(): ParameterAnnotation<O> {
-//         return MakeDecoratorUtil.makeDecoratorFactory<O>(this.parameterHandlers[0], undefined,
-//             undefined, undefined, this.defaultOption, this.metadataKey);
-//     }
-//
-//     public parameter(
-//         parameterHandler?: ParameterHandler<O>
-//     ): ParameterAnnotationBuilder<O> {
-//         if (parameterHandler) {
-//             this.parameterHandlers.push(parameterHandler);
-//         }
-//         return this;
-//     }
-//     public method(
-//         methodHandler?: MethodHandler<O>
-//     ): ParameterMethodAnnotationBuilder<O> {
-//         const methodHandlers = methodHandler ? [methodHandler] : [];
-//         return new ParameterMethodAnnotationBuilder<O>(this.defaultOption, this.metadataKey, this.parameterHandlers, methodHandlers);
-//     }
-//     public class(classHandler?: ClassHandler<O>): ParameterClassDecoratorFactoryBuilder<O> {
-//         const classHandlers = classHandler ? [classHandler] : [];
-//         return new ParameterClassDecoratorFactoryBuilder<O>(this.defaultOption, this.metadataKey, this.parameterHandlers, classHandlers);
-//     }
-//
-//     public property(propertyHandler?: PropertyHandler<O>): ParameterPropertyAnnotationBuilder<O> {
-//         return new ParameterPropertyAnnotationBuilder<O>(this.defaultOption, this.metadataKey, this.parameterHandlers, propertyHandler);
-//     }
-//
-// }
 
 export {ParameterAnnotation, ParameterAnnotationBuilder};

@@ -6,23 +6,24 @@ import {PropertyClassAnnotationBuilder} from './property-class-annotation-builde
 import {PropertyMethodAnnotationBuilder} from './property-method-annotation-builder';
 import {ParameterPropertyAnnotationBuilder} from '../parameter/parameter-property-annotation-builder';
 import {Annotation} from "../../bean/annotation";
+import {MethodClassDecorator} from "../method/method-class-annotation-builder";
 
-type PropertyAnnotation<O> = ((option?: O) => PropertyDecorator) & Annotation<O>;
+type PropertyAnnotation<O, P> = (P extends void ? PropertyDecorator : void) & ((option: P) => PropertyDecorator) & Annotation<O, P>;
 
-type PropertyAnnotationBuilder<O> = {
-    build(): PropertyAnnotation<O>;
+type PropertyAnnotationBuilder<O, P> = {
+    build(): PropertyAnnotation<O, P>;
     class(
         classHandler?: ClassHandler<O>
-    ): PropertyClassAnnotationBuilder<O>;
+    ): PropertyClassAnnotationBuilder<O, P>;
     method(
         methodHandler?: MethodHandler<O>
-    ): PropertyMethodAnnotationBuilder<O>;
+    ): PropertyMethodAnnotationBuilder<O, P>;
     property(
         propertyHandler?: PropertyHandler<O>
-    ): PropertyAnnotationBuilder<O>;
+    ): PropertyAnnotationBuilder<O, P>;
     parameter(
         parameterHandler?: ParameterHandler<O>
-    ): ParameterPropertyAnnotationBuilder<O>;
+    ): ParameterPropertyAnnotationBuilder<O, P>;
 }
 
 // class PropertyDecoratorFactoryBuilder<O> extends AbstractAnnotationBuilder<O> {

@@ -5,18 +5,19 @@ import {MethodHandler} from '../../bean/method-handler';
 import {ParameterMethodClassAnnotationBuilder} from './parameter-method-class-annotation-builder';
 import {ParameterPropertyMethodAnnotationBuilder} from './parameter-property-method-annotation-builder';
 import {Annotation} from "../../bean/annotation";
+import {MethodClassDecorator} from "../method/method-class-annotation-builder";
 
 type ParameterMethodDecorator = ParameterDecorator & MethodDecorator;
-type ParameterMethodAnnotation<O> = ParameterMethodDecorator & ((option?: O) => ParameterMethodDecorator) & Annotation<O>;
+type ParameterMethodAnnotation<O, P> = (P extends void ? ParameterMethodDecorator : void) & ((option: P) => ParameterMethodDecorator) & Annotation<O, P>;
 
-type ParameterMethodAnnotationBuilder<O> = {
-    build(): ParameterMethodAnnotation<O>;
-    parameter(parameterHandler?: ParameterHandler<O>): ParameterMethodAnnotationBuilder<O>;
+type ParameterMethodAnnotationBuilder<O, P> = {
+    build(): ParameterMethodAnnotation<O, P>;
+    parameter(parameterHandler?: ParameterHandler<O>): ParameterMethodAnnotationBuilder<O, P>;
     method(
         methodHandler?: MethodHandler<O>
-    ): ParameterMethodAnnotationBuilder<O>;
-    class(classHandler?: ClassHandler<O>): ParameterMethodClassAnnotationBuilder<O>;
-    property(propertyHandler?: PropertyHandler<O>): ParameterPropertyMethodAnnotationBuilder<O>;
+    ): ParameterMethodAnnotationBuilder<O, P>;
+    class(classHandler?: ClassHandler<O>): ParameterMethodClassAnnotationBuilder<O, P>;
+    property(propertyHandler?: PropertyHandler<O>): ParameterPropertyMethodAnnotationBuilder<O, P>;
 }
 
 // class ParameterMethodAnnotationBuilder2<O> extends AbstractAnnotationBuilder<O> {

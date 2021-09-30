@@ -3,11 +3,7 @@ import {PropertyHandler} from "../bean/property-handler";
 import {ClassHandler} from "../bean/class-handler";
 import {ParameterHandler} from "../bean/parameter-handler";
 import {DecoratorDefinition} from "../type/decorator-definition";
-import {ClassDefinition} from "../type/class-definition";
 import {ReflectMetadataUtil} from "./reflect-metadata-util";
-import {MethodDefinition} from "../type/method-definition";
-import {ParameterDefinition} from "../type/parameter-definition";
-import {PropertyDefinition} from "../type/property-definition";
 import {ReflectUtil} from "./reflect-util";
 
 /**
@@ -20,45 +16,48 @@ export class MakeAnnotationUtil {
         return `${propertyKey.toString()}&${parameterIndex}`;
     }
 
-    static makeDecorator<O>(
+    static makeDecorator<O, P = O>(
         args: any[],
         decoratorFactory: any,
-        option: any,
+        option: P & O,
         parameterHandlers: ParameterHandler<O>[],
         propertyHandlers: PropertyHandler<O>[],
         methodHandlers: MethodHandler<O>[],
         classHandlers: ClassHandler<O>[],
-        defaultOption?: O | ((o: O) => O),
+        defaultOption?: O | ((o: P) => O),
         metadataKey?: string | symbol
     ) {
+        let _option;
         // 默认值
         if (defaultOption) {
             if (defaultOption instanceof Function) {
-                option = defaultOption(option);
+                _option = defaultOption(option);
             } else if (option === undefined) {
-                option = defaultOption;
+                _option = defaultOption;
             }
+        } else {
+            _option = option as any;
         }
         // args 参数为装饰器 回调参数 不同种类的装饰器有不同的参数
         if (args.length === 1) {
             // 处理类装饰器
             return MakeAnnotationUtil.makeClassDecorator<O>(
-                classHandlers, metadataKey, decoratorFactory)(option)(args[0]);
+                classHandlers, metadataKey, decoratorFactory)(_option)(args[0]);
         } else if (args.length === 3) {
             //      || 这里babel propertyDecorator有第三个参数 有值 值中有initializer属性 因为适配
             if (args[2] === undefined || args[2].initializer) {
                 // 外理属性装饰器
                 return MakeAnnotationUtil.makePropertyDecorator<O>(
-                    propertyHandlers, metadataKey, decoratorFactory)(option)(args[0], args[1]);
+                    propertyHandlers, metadataKey, decoratorFactory)(_option)(args[0], args[1]);
             } else {
                 if (typeof args[2] === 'number') {
                     // 处理参数装饰器
                     return MakeAnnotationUtil.makeParameterDecorator<O>(
-                        parameterHandlers, metadataKey, decoratorFactory)(option)(args[0], args[1], args[2]);
+                        parameterHandlers, metadataKey, decoratorFactory)(_option)(args[0], args[1], args[2]);
                 } else {
                     // 处理方法装饰器
                     return MakeAnnotationUtil.makeMethodDecorator<O>(
-                        methodHandlers, metadataKey, decoratorFactory)(option)(args[0], args[1], args[2]);
+                        methodHandlers, metadataKey, decoratorFactory)(_option)(args[0], args[1], args[2]);
                 }
             }
         }
@@ -73,18 +72,18 @@ export class MakeAnnotationUtil {
      * @param defaultOption
      * @param metadataKey
      */
-    public static makeDecoratorFactory<O>(
+    public static makeDecoratorFactory<O, P>(
         parameterHandlers: ParameterHandler<O>[],
         propertyHandlers: PropertyHandler<O>[],
         methodHandlers: MethodHandler<O>[],
         classHandlers: ClassHandler<O>[],
-        defaultOption?: O | ((o: O) => O),
+        defaultOption?: O | ((o: P) => O),
         metadataKey?: string | symbol
     ): any {
         const decoratorFactory = (...params: any[]) => {
             // // 装饰器工场无参时可省略()  但是类装饰器工场的第一个参数将不能为function类型 否则会断定为无参类型进而报错，停用
             if (params.length > 1) {
-                return this.makeDecorator(params, decoratorFactory, undefined, parameterHandlers,
+                return this.makeDecorator(params, decoratorFactory, undefined as any, parameterHandlers,
                     propertyHandlers, methodHandlers, classHandlers, defaultOption, metadataKey)
             }
             return (...args: any[]) => {
@@ -196,7 +195,7 @@ export class MakeAnnotationUtil {
      * @param metadataKey
      * @param factory
      */
-    private static makeParameterDecorator<O, V = void>(
+    private static makeParameterDecorator<O>(
         handlers: ParameterHandler<O>[],
         metadataKey?: string | symbol,
         factory?: any

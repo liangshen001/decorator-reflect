@@ -2,11 +2,10 @@ import {DecoratorDefinition} from "./decorator-definition";
 import {PropertyDefinition} from "./property-definition";
 import {MethodDefinition} from "./method-definition";
 import {ParameterDefinition} from "./parameter-definition";
-import {ReflectMetadataUtil} from "../util/reflect-metadata-util";
 import {PayloadDefinition} from "./payload-definition";
 
 
-export class ClassDefinition<T extends Function> extends PayloadDefinition {
+export class ClassDefinition<T extends Function = any> extends PayloadDefinition {
     name: string;
     properties: PropertyDefinition[];
     methods: MethodDefinition[];

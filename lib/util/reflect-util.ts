@@ -1,5 +1,4 @@
 
-import {MakeAnnotationUtil} from "./make-annotation-util";
 import {ClassDefinition} from "../type/class-definition";
 import {MethodDefinition} from "../type/method-definition";
 import {PropertyDefinition} from "../type/property-definition";
@@ -9,7 +8,7 @@ import {Annotation} from "../bean/annotation";
 
 export class ReflectUtil {
 
-    public static classesMap = new Map<Function, ClassDefinition<any>>();
+    public static classesMap = new Map<Function, ClassDefinition>();
 
     /**
      *

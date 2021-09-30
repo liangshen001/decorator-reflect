@@ -4,63 +4,23 @@ import {ClassHandler} from '../../bean/class-handler';
 import {MethodHandler} from '../../bean/method-handler';
 import {ParameterPropertyMethodClassAnnotationBuilder} from './parameter-property-method-class-annotation-builder';
 import {Annotation} from "../../bean/annotation";
+import {MethodClassDecorator} from "../method/method-class-annotation-builder";
 
 
 type ParameterPropertyMethodDecorator = ParameterDecorator & PropertyDecorator & MethodDecorator;
-type ParameterPropertyMethodAnnotation<O> = ParameterPropertyMethodDecorator & ((option?: O) => ParameterPropertyMethodDecorator) & Annotation<O>;
+type ParameterPropertyMethodAnnotation<O, P> = (P extends void ? ParameterPropertyMethodDecorator : void) & ((option: P) => ParameterPropertyMethodDecorator) & Annotation<O, P>;
 
-type ParameterPropertyMethodAnnotationBuilder<O> = {
-    build(): ParameterPropertyMethodAnnotation<O>;
+type ParameterPropertyMethodAnnotationBuilder<O, P> = {
+    build(): ParameterPropertyMethodAnnotation<O, P>;
     parameter(
         parameterHandler?: ParameterHandler<O>
-    ): ParameterPropertyMethodAnnotationBuilder<O>;
+    ): ParameterPropertyMethodAnnotationBuilder<O, P>;
     method(
         methodHandler?: MethodHandler<O>
-    ): ParameterPropertyMethodAnnotationBuilder<O>;
-    class(classHandler?: ClassHandler<O>): ParameterPropertyMethodClassAnnotationBuilder<O>;
-    property(propertyHandler?: PropertyHandler<O>): ParameterPropertyMethodAnnotationBuilder<O>;
+    ): ParameterPropertyMethodAnnotationBuilder<O, P>;
+    class(classHandler?: ClassHandler<O>): ParameterPropertyMethodClassAnnotationBuilder<O, P>;
+    property(propertyHandler?: PropertyHandler<O>): ParameterPropertyMethodAnnotationBuilder<O, P>;
 }
 
-// class ParameterPropertyMethodAnnotationBuilder<O>
-//     extends AbstractAnnotationBuilder<O> {
-//
-//     constructor(
-//         public defaultOption: O | ((o: O) => O) | undefined,
-//         public metadataKey: string | symbol | undefined,
-//         public parameterHandler: ParameterHandler<O>,
-//         public propertyHandler: PropertyHandler<O>,
-//         public methodHandler: MethodHandler<O>,
-//     ) {
-//         super(defaultOption, metadataKey);
-//     }
-//
-//     public build(): ParameterPropertyMethodDecoratorFactory<O> {
-//         return <any> MakeDecoratorUtil.makeDecoratorFactory<O>(this.parameterHandler, this.propertyHandler,
-//             this.methodHandler, undefined, this.defaultOption, this.metadataKey);
-//     }
-//
-//     public parameter(
-//         parameterHandler?: ParameterHandler<O>
-//     ): ParameterPropertyMethodAnnotationBuilder<O> {
-//         return new ParameterPropertyMethodAnnotationBuilder<O>(
-//             this.defaultOption, this.metadataKey, parameterHandler, this.propertyHandler, this.methodHandler);
-//     }
-//     public method(
-//         methodHandler?: MethodHandler<O>
-//     ): ParameterPropertyMethodAnnotationBuilder<O> {
-//         return new ParameterPropertyMethodAnnotationBuilder<O>(
-//             this.defaultOption, this.metadataKey, this.parameterHandler, this.propertyHandler, methodHandler);
-//     }
-//     public class(classHandler?: ClassHandler<O>): ParameterPropertyMethodClassAnnotationBuilder<O> {
-//         return new ParameterPropertyMethodClassAnnotationBuilder<O>(
-//             this.defaultOption, this.metadataKey, this.parameterHandler, this.propertyHandler, this.methodHandler, classHandler);
-//     }
-//
-//     public property(propertyHandler?: PropertyHandler<O>): ParameterPropertyMethodAnnotationBuilder<O> {
-//         return new ParameterPropertyMethodAnnotationBuilder<O>(
-//             this.defaultOption, this.metadataKey, this.parameterHandler, propertyHandler, this.methodHandler);
-//     }
-//
-// }
 
 export {ParameterPropertyMethodAnnotation, ParameterPropertyMethodAnnotationBuilder, ParameterPropertyMethodDecorator};

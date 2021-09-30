@@ -7,57 +7,19 @@ import {PropertyClassAnnotationBuilder} from '../property/property-class-annotat
 import {ParameterClassAnnotationBuilder} from '../parameter/parameter-class-annotation-builder';
 import {Annotation} from "../../bean/annotation";
 
-type ClassAnnotation<O> = ((option?: O) => ClassDecorator) & Annotation<O>;
+type ClassAnnotation<O, P> = ((option: P) => ClassDecorator) & Annotation<O, P>;
 // type ClassDecoratorFactory<O> =
 //     O extends void ?
 //         (ClassDecorator & (() => ClassDecorator)) :
 //         (option: O) => ClassDecorator;
 
-type ClassAnnotationBuilder<O> = {
-    build(): ClassAnnotation<O>;
-    class(classHandler?: ClassHandler<O>): ClassAnnotationBuilder<O>;
-    method(methodHandler?: MethodHandler<O>): MethodClassAnnotationBuilder<O>;
-    property(propertyHandler?: PropertyHandler<O>): PropertyClassAnnotationBuilder<O>;
-    parameter(parameterHandler?: ParameterHandler<O>): ParameterClassAnnotationBuilder<O>;
+type ClassAnnotationBuilder<O, P> = {
+    build(): ClassAnnotation<O, P>;
+    class(classHandler?: ClassHandler<O>): ClassAnnotationBuilder<O, P>;
+    method(methodHandler?: MethodHandler<O>): MethodClassAnnotationBuilder<O, P>;
+    property(propertyHandler?: PropertyHandler<O>): PropertyClassAnnotationBuilder<O, P>;
+    parameter(parameterHandler?: ParameterHandler<O>): ParameterClassAnnotationBuilder<O, P>;
 }
-
-// class ClassAnnotationBuilder<O> extends AbstractAnnotationBuilder<O> {
-//
-//     constructor(
-//         public defaultOption: O | ((o: O) => O) | undefined,
-//         public metadataKey: string | symbol | undefined,
-//         public classHandlers: ClassHandler<O>[]
-//     ) {
-//         super(defaultOption, metadataKey, [], [], [], classHandlers);
-//     }
-//
-//     public build(): ClassAnnotation<O> {
-//         return super.build();
-//     }
-//
-//     public class(classHandler?: ClassHandler<O>): ClassAnnotationBuilder<O> {
-//         if (classHandler) {
-//             this.classHandlers.push(classHandler);
-//         }
-//         return this;
-//     }
-//
-//     public method(methodHandler?: MethodHandler<O>): MethodClassAnnotationBuilder<O> {
-//         const methodHandlers = methodHandler ? [methodHandler] : [];
-//         return new MethodClassAnnotationBuilder<O>(this.defaultOption, this.metadataKey, methodHandlers, this.classHandlers);
-//     }
-//
-//     public property(propertyHandler?: PropertyHandler<O>): PropertyClassDecoratorFactoryBuilder<O> {
-//         const propertyHandlers = propertyHandler ? [propertyHandler] : [];
-//         return new PropertyClassDecoratorFactoryBuilder<O>(this.defaultOption, this.metadataKey, propertyHandlers, this.classHandlers);
-//     }
-//
-//     public parameter(parameterHandler?: ParameterHandler<O>): ParameterClassDecoratorFactoryBuilder<O> {
-//         const parameterHandlers = parameterHandler ? [parameterHandler] : [];
-//         return new ParameterClassDecoratorFactoryBuilder<O>(this.defaultOption, this.metadataKey, parameterHandlers, this.classHandlers);
-//     }
-//
-// }
 
 
 export {ClassAnnotation, ClassAnnotationBuilder};
