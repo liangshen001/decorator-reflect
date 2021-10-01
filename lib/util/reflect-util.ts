@@ -17,7 +17,8 @@ export class ReflectUtil {
      * @param propertyKey
      * @param parameterIndex
      */
-    public static getDecoratorOption<O>(decorator: Annotation<O>, target: Function, propertyKey?: string, parameterIndex?: number): O | undefined {
+
+    public static getDecoratorOption<O, P>(decorator: Annotation<O, P>, target: Function, propertyKey?: string, parameterIndex?: number): O | null {
         let decoratorPayloadDefinition;
         const classDefinition = ReflectUtil.getClassDefinition(target);
         if (propertyKey) {
@@ -32,7 +33,7 @@ export class ReflectUtil {
         }
 
         const decoratorDefinition = decoratorPayloadDefinition?.decorators.find(i => i.type === decorator);
-        return decoratorDefinition?.option;
+        return decoratorDefinition ? decoratorDefinition.option : null;
     }
 
     public static getDefinition<T extends Function>(target: T | Object, propertyKey: string | symbol | undefined, parameterIndex: number): ParameterDefinition | undefined;
