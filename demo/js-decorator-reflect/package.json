@@ -40,7 +40,9 @@
       [
         "@babel/plugin-proposal-class-properties"
       ],
-      ["babel-plugin-parameter-decorator"]
+      [
+        "babel-plugin-parameter-decorator"
+      ]
     ]
   }
 }
