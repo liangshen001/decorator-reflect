@@ -9,12 +9,13 @@ export class ClassDefinition<T extends Function = any> extends PayloadDefinition
     name: string;
     properties: PropertyDefinition[];
     methods: MethodDefinition[];
-    parameters?: ParameterDefinition[];
+    parameters: ParameterDefinition[];
     private constructor(public type: T) {
         super();
         this.name = type.name;
         this.properties = [];
         this.methods = [];
+        this.parameters = [];
     }
 
     static of<T extends Function>(type: T): ClassDefinition<T> {
@@ -32,7 +33,7 @@ export class ClassDefinition<T extends Function = any> extends PayloadDefinition
     }
 
     resetParameters(paramTypes: Function[]) {
-        this.parameters = paramTypes?.map(ParameterDefinition.of);
+        this.parameters = paramTypes.map(ParameterDefinition.of);
     }
 
     addProperty(target: Object, propertyKey: string | symbol, type: Function): PropertyDefinition {
