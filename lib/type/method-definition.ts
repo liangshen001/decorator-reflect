@@ -23,5 +23,6 @@ export class MethodDefinition<R extends Function = any> extends PayloadDefinitio
             this.parameters[index] = parameter;
         }
         parameter.addDecorator(decorator)
+        return parameter;
     }
 }

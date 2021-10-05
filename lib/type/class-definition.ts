@@ -52,5 +52,6 @@ export class ClassDefinition<T extends Function = any> extends PayloadDefinition
             this.parameters[index] = parameter;
         }
         parameter.addDecorator(decorator);
+        return parameter;
     }
 }

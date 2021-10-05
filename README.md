@@ -69,39 +69,65 @@ new Demo1Class().method()
 ```
 
 ```typescript
-import {DecoratorBuilder, ReflectUtil} from "decorator-reflect";
+import {ReflectUtil, DecoratorBuilder} from "decorator-reflect";
 
+/**
+ * 创建装饰器工厂 TestAnnotation
+ */
 const TestAnnotation = DecoratorBuilder.create<string>()
-    .class((target, option, paramTypes) => {
-        console.log('**********class');
-        console.log(target); // [Function: TestClass]
-        console.log(option); // test class
-        console.log(paramTypes); // [ [Function: Number], [Function: String] ]
-    }).parameter((target, propertyKey, parameterIndex, option, type) => {
-        console.log('**********parameter');
-        console.log(target); // [Function: TestClass]
-        console.log(propertyKey); // undefined
-        console.log(parameterIndex); // 1
-        console.log(option); // test parameter
-        console.log(type); // [Function: String]
-    }).property(((target, propertyKey, option, isStatic, type) => {
-        console.log('**********property');
-        console.log(target); // [Function: TestClass]
-        console.log(propertyKey); // prop
-        console.log(option); // test property
-        console.log(isStatic); // true
-        console.log(type); // [Function: Boolean]
-    })).method(((target, propertyKey, descriptor,
-                 option, isStatic, paramTypes, returnType) => {
+    .method(((target, propertyKey, descriptor, option, definition) => {
         console.log('**********method');
         console.log(target); // TestClass {}
         console.log(propertyKey); // prop
         console.log(option); // test property
-        console.log(isStatic); // false
-        console.log(paramTypes); // [ [Function: String] ]
-        console.log(returnType); // [Function: Boolean]
-    })).build();
+        console.log(definition);
+        /**
+         MethodDefinition {
+  decorators: [ DecoratorDefinition { type: [Function], option: 'test method' } ],
+  name: 'method',
+  parameters: [ ParameterDefinition { decorators: [], type: [Function: String] } ],
+  returnType: [Function: Boolean],
+  isStatic: false
+}
+         */
+    })).property(((target, propertyKey, option, definition) => {
+        console.log('**********property');
+        console.log(target); // [Function: TestClass]
+        console.log(propertyKey); // prop
+        console.log(option); // test property
+        console.log(definition);
+        /**
+         PropertyDefinition {
+  decorators: [ DecoratorDefinition { type: [Function], option: 'test property' } ],
+  type: [Function: Boolean],
+  name: 'prop',
+  isStatic: true
+}
+         */
+    })).parameter((target, propertyKey, parameterIndex, option, definition) => {
+        console.log('**********parameter');
+        console.log(target); // [Function: TestClass]
+        console.log(propertyKey); // undefined
+        console.log(parameterIndex); // 1
+        console.log(definition);
+        /**
+         ParameterDefinition {
+  decorators: [
+    DecoratorDefinition { type: [Function], option: 'test parameter' }
+  ],
+  type: [Function: String]
+}
+         */
+    }).class((target, option, definition) => {
+        console.log('**********class');
+        console.log(target); // [Function: TestClass]
+        console.log(option); // test class
+        console.log(definition); // ClassDefinition
+    }).build();
 
+const Test = DecoratorBuilder.create().class().build();
+
+@Test()
 @TestAnnotation('test class')
 class TestClass {
 

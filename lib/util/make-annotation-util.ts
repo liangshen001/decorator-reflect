@@ -5,6 +5,7 @@ import {ParameterHandler} from "../bean/parameter-handler";
 import {DecoratorDefinition} from "../type/decorator-definition";
 import {ReflectMetadataUtil} from "./reflect-metadata-util";
 import {ReflectUtil} from "./reflect-util";
+import {ParameterDefinition} from "../type/parameter-definition";
 
 /**
  * 构建装饰器工具类
@@ -123,7 +124,7 @@ export class MakeAnnotationUtil {
                 method.addDecorator(new DecoratorDefinition(factory, option));
 
                 return handlers.reduce((p, v) => {
-                    const p2 = v(target, <string>propertyKey, p, option, target instanceof Function, paramTypes, returnType);
+                    const p2 = v(target, <string>propertyKey, p, option, method!);
                     return p2 || p;
                 }, descriptor);
             };
@@ -154,7 +155,7 @@ export class MakeAnnotationUtil {
 
                 if (handlers.length) {
                     handlers.forEach(handler => {
-                        handler(target, <string>propertyKey, option, typeof target === 'function', type);
+                        handler(target, <string>propertyKey, option, property!);
                     });
                 }
             };
@@ -183,7 +184,7 @@ export class MakeAnnotationUtil {
                 classInfo.resetParameters(paramTypes);
 
                 return handlers.reduce((p, v) => {
-                    const p2 = v(p, option, paramTypes);
+                    const p2 = v(p, option, classInfo);
                     return p2 || p;
                 }, target)
             };
@@ -210,19 +211,20 @@ export class MakeAnnotationUtil {
 
                 const classInfo = ReflectUtil.getDefinition(target);
                 const decoratorDefinition = new DecoratorDefinition(factory, option);
+                let parameter: ParameterDefinition;
                 if (propertyKey === undefined) {
                     classInfo.resetParameters(paramTypes);
-                    classInfo.setParameterDecorator(parameterIndex, decoratorDefinition);
+                    parameter = classInfo.setParameterDecorator(parameterIndex, decoratorDefinition);
                 } else {
                     let method = classInfo.methods.find(method => method.name === propertyKey);
                     if (!method) {
                         method = classInfo.addMethod(target, propertyKey, paramTypes, returnType);
                     }
-                    method.setParameterDecorator(parameterIndex, decoratorDefinition);
+                    parameter = method.setParameterDecorator(parameterIndex, decoratorDefinition);
                 }
 
                 handlers.forEach(handler => {
-                    handler(target, <string>propertyKey, parameterIndex, option, paramTypes && paramTypes[parameterIndex]);
+                    handler(target, <string>propertyKey, parameterIndex, option, parameter);
                 });
                 // return handlers.reduce((p, v) => {
                 //     const p2 = v(target, <string> propertyKey, p, option, paramTypes, returnType);
