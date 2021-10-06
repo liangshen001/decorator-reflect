@@ -1,8 +1,8 @@
-import {PayloadDefinition} from "./payload-definition";
+import {DecoratorsPayloadDefinition} from "./decorators-payload-definition";
 import {ReflectMetadataUtil} from "../util/reflect-metadata-util";
 
 
-export class PropertyDefinition<T extends Function = any> extends PayloadDefinition {
+export class PropertyDefinition<T extends Function = any> extends DecoratorsPayloadDefinition {
 
     private constructor(public target: Object,
                         public type: T,

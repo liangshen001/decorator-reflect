@@ -1,14 +1,15 @@
 import {DecoratorDefinition} from "./decorator-definition";
 import {Annotation} from "../bean/annotation";
 
-export abstract class PayloadDefinition {
+export abstract class DecoratorsPayloadDefinition {
     protected constructor(public decorators: DecoratorDefinition[] = []) {
     }
-    addDecorator(decorator: DecoratorDefinition) {
-        this.decorators.push(decorator);
+
+    hasDecoratorDefinition<O, P>(decorator: Annotation<O, P>) {
+        return this.decorators.some(i => i.type === decorator);
     }
 
-    hasDecorator<O, P>(decorator: Annotation<O, P>) {
-        return this.decorators.some(i => i.type === decorator);
+    getDecoratorDefinitions<O, P>(decorator: Annotation<O, P>) {
+        return this.decorators.filter(i => i.type === decorator);
     }
 }

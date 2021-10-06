@@ -1,6 +1,6 @@
-import {PayloadDefinition} from "./payload-definition";
+import {DecoratorsPayloadDefinition} from "./decorators-payload-definition";
 
-export class ParameterDefinition<T extends Function = any> extends PayloadDefinition {
+export class ParameterDefinition<T extends Function = any> extends DecoratorsPayloadDefinition {
     private constructor(public target: Object,
                         public propertyKey: string | symbol | undefined,
                         public index: number,

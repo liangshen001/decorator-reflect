@@ -6,6 +6,8 @@ import {DecoratorDefinition} from "../type/decorator-definition";
 import {ReflectMetadataUtil} from "./reflect-metadata-util";
 import {ReflectUtil} from "./reflect-util";
 import {ParameterDefinition} from "../type/parameter-definition";
+import {PropertyDefinition} from "../type/property-definition";
+import {MethodDefinition} from "../type/method-definition";
 
 /**
  * 构建装饰器工具类
@@ -119,9 +121,11 @@ export class MakeAnnotationUtil {
 
                 let method = classInfo.methods.find(method => method.name === propertyKey);
                 if (!method) {
-                    method = classInfo.addMethod(target, propertyKey, paramTypes, returnType);
+                    method = MethodDefinition.of(target, propertyKey, paramTypes.map(
+                        (i, index) => ParameterDefinition.of(target, propertyKey, index, i)), returnType);
+                    classInfo.methods.push(method);
                 }
-                method.addDecorator(new DecoratorDefinition(factory, option));
+                method.decorators.push(new DecoratorDefinition(factory, option))
 
                 return handlers.reduce((p, v) => {
                     const p2 = v(target, <string>propertyKey, p, option, method!);
@@ -149,9 +153,10 @@ export class MakeAnnotationUtil {
                 const classInfo = ReflectUtil.getDefinition(target);
                 let property = classInfo.properties.find(property => property.name == propertyKey);
                 if (!property) {
-                    property = classInfo.addProperty(target, propertyKey, type);
+                    property = PropertyDefinition.of(target, propertyKey, type);
+                    classInfo.properties.push(property);
                 }
-                property.addDecorator(new DecoratorDefinition(factory, option));
+                property.decorators.push(new DecoratorDefinition(factory, option));
 
                 if (handlers.length) {
                     handlers.forEach(handler => {
@@ -180,7 +185,7 @@ export class MakeAnnotationUtil {
                 const paramTypes = ReflectMetadataUtil.getParamsTypes(target);
 
                 const classInfo = ReflectUtil.getDefinition(target);
-                classInfo.addDecorator(new DecoratorDefinition(decorator, option));
+                classInfo.decorators.push(new DecoratorDefinition(decorator, option))
                 if (!classInfo.parameters.length) {
                     classInfo.parameters = paramTypes.map(
                         (i, index) => ParameterDefinition.of(classInfo.type, undefined, index, i));
@@ -220,14 +225,25 @@ export class MakeAnnotationUtil {
                         classInfo.parameters = paramTypes.map(
                             (i, index) => ParameterDefinition.of(classInfo.type, undefined, index, i));
                     }
-                    parameter = classInfo.setParameterDecorator(parameterIndex, decoratorDefinition);
+                    parameter = classInfo.parameters[parameterIndex];
+                    if (!parameter) {
+                        parameter = ParameterDefinition.of(classInfo.type, undefined, parameterIndex, undefined);
+                        classInfo.parameters[parameterIndex] = parameter;
+                    }
                 } else {
                     let method = classInfo.methods.find(method => method.name === propertyKey);
                     if (!method) {
-                        method = classInfo.addMethod(target, propertyKey, paramTypes, returnType);
+                        method = MethodDefinition.of(target, propertyKey, paramTypes.map(
+                            (i, index) => ParameterDefinition.of(target, propertyKey, index, i)), returnType);
+                        classInfo.methods.push(method);
                     }
-                    parameter = method.setParameterDecorator(parameterIndex, decoratorDefinition);
+                    let parameter = method.parameters[parameterIndex];
+                    if (!parameter) {
+                        parameter = ParameterDefinition.of(method.target, method.name, parameterIndex, undefined);
+                        method.parameters[parameterIndex] = parameter;
+                    }
                 }
+                parameter!.decorators.push(decoratorDefinition);
 
                 handlers.forEach(handler => {
                     handler(target, <string>propertyKey, parameterIndex, option, parameter);
