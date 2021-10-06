@@ -6,9 +6,9 @@ import {ReflectUtil, DecoratorBuilder} from "decorator-reflect";
 const TestAnnotation = DecoratorBuilder.create<string>()
     .method(((target, propertyKey, descriptor, option, definition) => {
         console.log('**********method');
-        console.log(target); // TestClass {}
-        console.log(propertyKey); // prop
-        console.log(option); // test property
+        console.log(target); // TestClass { method: [Function] }
+        console.log(propertyKey); // method
+        console.log(option); // test method
         console.log(definition);
         /**
 MethodDefinition {
@@ -51,6 +51,7 @@ ParameterDefinition {
         console.log('**********class');
         console.log(target); // [Function: TestClass]
         console.log(option); // test class
+        console.log(2222);
         console.log(definition); // ClassDefinition
     }).build();
 
@@ -71,4 +72,4 @@ class TestClass {
     }
 }
 // 获取反射信息 ClassDefinition
-console.log(ReflectUtil.getDefinition(TestClass));
+// console.log(ReflectUtil.getDefinition(TestClass).parameters);

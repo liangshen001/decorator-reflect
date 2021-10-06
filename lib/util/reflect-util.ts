@@ -42,7 +42,7 @@ export class ReflectUtil {
     public static getDefinition<T extends Function>(target: Object): ClassDefinition<T>;
     public static getDefinition<T extends Function>(target: T | Object, propertyKey?: string | symbol, parameterIndex?: number):
         ClassDefinition<T> | MethodDefinition | PropertyDefinition | ParameterDefinition | undefined {
-        const classType = target instanceof Function ? target : target.constructor;
+        const classType = target instanceof Function ? target : target.constructor as T;
         const classDefinition = this.classesMap.get(classType);
         if (!classDefinition) {
             const classDefinition = ClassDefinition.of(classType);

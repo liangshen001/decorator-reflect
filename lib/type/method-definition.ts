@@ -2,10 +2,11 @@ import {DecoratorDefinition} from "./decorator-definition";
 import {ParameterDefinition} from "./parameter-definition";
 import {ReflectMetadataUtil} from "../util/reflect-metadata-util";
 import {PayloadDefinition} from "./payload-definition";
+import {ParametersPayloadDefinition} from "./parameters-payload-definition";
 
 
-export class MethodDefinition<R extends Function = any> extends PayloadDefinition {
-    private constructor(target: Object,
+export class MethodDefinition<R extends Function = any> extends ParametersPayloadDefinition {
+    private constructor(public target: Object,
                         public name: string | symbol,
                         public parameters: ParameterDefinition[],
                         public returnType: R,
@@ -19,7 +20,7 @@ export class MethodDefinition<R extends Function = any> extends PayloadDefinitio
     setParameterDecorator(index: number, decorator: DecoratorDefinition) {
         let parameter = this.parameters[index];
         if (!parameter) {
-            parameter = ParameterDefinition.of();
+            parameter = ParameterDefinition.of(this.target, this.name, index, undefined);
             this.parameters[index] = parameter;
         }
         parameter.addDecorator(decorator)

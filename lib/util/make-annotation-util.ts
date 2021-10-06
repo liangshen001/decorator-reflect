@@ -181,7 +181,10 @@ export class MakeAnnotationUtil {
 
                 const classInfo = ReflectUtil.getDefinition(target);
                 classInfo.addDecorator(new DecoratorDefinition(decorator, option));
-                classInfo.resetParameters(paramTypes);
+                if (!classInfo.parameters.length) {
+                    classInfo.parameters = paramTypes.map(
+                        (i, index) => ParameterDefinition.of(classInfo.type, undefined, index, i));
+                }
 
                 return handlers.reduce((p, v) => {
                     const p2 = v(p, option, classInfo);
@@ -213,7 +216,10 @@ export class MakeAnnotationUtil {
                 const decoratorDefinition = new DecoratorDefinition(factory, option);
                 let parameter: ParameterDefinition;
                 if (propertyKey === undefined) {
-                    classInfo.resetParameters(paramTypes);
+                    if (!classInfo.parameters.length) {
+                        classInfo.parameters = paramTypes.map(
+                            (i, index) => ParameterDefinition.of(classInfo.type, undefined, index, i));
+                    }
                     parameter = classInfo.setParameterDecorator(parameterIndex, decoratorDefinition);
                 } else {
                     let method = classInfo.methods.find(method => method.name === propertyKey);
