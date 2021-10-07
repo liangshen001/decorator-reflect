@@ -9,6 +9,10 @@ import {Annotation} from "../bean/annotation";
 export class ReflectUtil {
 
     public static classesMap = new Map<Function, ClassDefinition>();
+    public static classDecoratorMap = new Map<Annotation<any, any>, ClassDefinition[]>();
+    public static methodDecoratorMap = new Map<Annotation<any, any>, MethodDefinition[]>();
+    public static parameterDecoratorMap = new Map<Annotation<any, any>, ParameterDefinition[]>();
+    public static propertyDecoratorMap = new Map<Annotation<any, any>, PropertyDefinition[]>();
 
     /**
      *
@@ -34,6 +38,57 @@ export class ReflectUtil {
 
         const decoratorDefinition = decoratorPayloadDefinition?.decorators.find(i => i.type === decorator);
         return decoratorDefinition ? decoratorDefinition.option : null;
+    }
+
+    public static getDefinitions<O, P>(decorator: Annotation<O, P>):
+        (MethodDefinition | ClassDefinition | ParameterDefinition | PropertyDefinition)[];
+    public static getDefinitions<O, P>(decorator: Annotation<O, P>, type: 'class'): ClassDefinition[];
+    public static getDefinitions<O, P>(decorator: Annotation<O, P>, type: 'method'): MethodDefinition[];
+    public static getDefinitions<O, P>(decorator: Annotation<O, P>, type: 'property'): PropertyDefinition[];
+    public static getDefinitions<O, P>(decorator: Annotation<O, P>, type: 'parameter'): ParameterDefinition[];
+    public static getDefinitions<O, P>(decorator: Annotation<O, P>, type?: 'class' | 'method' | 'property' | 'parameter'):
+        (MethodDefinition | ClassDefinition | ParameterDefinition | PropertyDefinition)[] {
+        const types = ['class', 'method', 'property', 'parameter']
+        if (type) {
+            let decoratorMap;
+            switch (type) {
+                case 'class':
+                    decoratorMap = this.classDecoratorMap;
+                    break;
+                case 'method':
+                    decoratorMap = this.methodDecoratorMap;
+                    break;
+                case 'parameter':
+                    decoratorMap = this.parameterDecoratorMap;
+                    break;
+                case 'property':
+                    decoratorMap = this.propertyDecoratorMap;
+                    break;
+            }
+            if (decoratorMap.has(decorator)) {
+                return decoratorMap.get(decorator)!;
+            }
+            const defaultDefinitions: any[] = [];
+            decoratorMap.set(decorator, defaultDefinitions);
+            return defaultDefinitions;
+        }
+        return types.flatMap(i => this.getDefinitions(decorator, i as any));
+    }
+
+    public static getMethodDefinitions<O, P>(decorator: Annotation<O, P>): MethodDefinition[] {
+        return this.getDefinitions(decorator, 'method');
+    }
+
+    public static getClassDefinitions<O, P>(decorator: Annotation<O, P>): ClassDefinition[] {
+        return this.getDefinitions(decorator, 'class');
+    }
+
+    public static getParameterDefinitions<O, P>(decorator: Annotation<O, P>): ParameterDefinition[] {
+        return this.getDefinitions(decorator, 'parameter');
+    }
+
+    public static getPropertyDefinitions<O, P>(decorator: Annotation<O, P>): PropertyDefinition[] {
+        return this.getDefinitions(decorator, 'property');
     }
 
     public static getDefinition<T extends Function>(target: T | Object, propertyKey: string | symbol | undefined, parameterIndex: number): ParameterDefinition | undefined;

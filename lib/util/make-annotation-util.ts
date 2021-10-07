@@ -113,6 +113,7 @@ export class MakeAnnotationUtil {
             (target, propertyKey, descriptor) => {
 
                 Reflect.defineMetadata(metadataKey, option, target, propertyKey);
+
                 /***********************************************设置methodinfo************************************************/
                 const paramTypes = ReflectMetadataUtil.getParamsTypes(target, propertyKey);
                 const returnType = ReflectMetadataUtil.getReturnType(target, propertyKey);
@@ -125,8 +126,9 @@ export class MakeAnnotationUtil {
                         (i, index) => ParameterDefinition.of(target, propertyKey, index, i)), returnType);
                     classInfo.methods.push(method);
                 }
-                method.decorators.push(new DecoratorDefinition(factory, option))
-
+                method.decorators.push(new DecoratorDefinition(factory, option));
+                // 设置根据装饰器反查功能
+                ReflectUtil.getMethodDefinitions(factory).push(method);
                 return handlers.reduce((p, v) => {
                     const p2 = v(target, <string>propertyKey, p, option, method!);
                     return p2 || p;
@@ -157,6 +159,8 @@ export class MakeAnnotationUtil {
                     classInfo.properties.push(property);
                 }
                 property.decorators.push(new DecoratorDefinition(factory, option));
+                // 设置根据装饰器反查功能
+                ReflectUtil.getPropertyDefinitions(factory).push(property)
 
                 if (handlers.length) {
                     handlers.forEach(handler => {
@@ -190,6 +194,8 @@ export class MakeAnnotationUtil {
                     classInfo.parameters = paramTypes.map(
                         (i, index) => ParameterDefinition.of(classInfo.type, undefined, index, i));
                 }
+                // 设置根据装饰器反查功能
+                ReflectUtil.getClassDefinitions(decorator).push(classInfo);
 
                 return handlers.reduce((p, v) => {
                     const p2 = v(p, option, classInfo);
@@ -244,6 +250,9 @@ export class MakeAnnotationUtil {
                     }
                 }
                 parameter!.decorators.push(decoratorDefinition);
+                // 设置根据装饰器反查功能
+                ReflectUtil.getParameterDefinitions(factory).push(parameter!)
+
 
                 handlers.forEach(handler => {
                     handler(target, <string>propertyKey, parameterIndex, option, parameter);
