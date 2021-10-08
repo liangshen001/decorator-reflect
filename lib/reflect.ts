@@ -42,46 +42,6 @@ export namespace Reflect {
      */
     export declare function getParameterDefinitionForMethod<T extends Function>(target: T, name: string, index: number): ParameterDefinition | undefined;
 
-    /**
-     * 获取类的指定装饰器的定义
-     * @param target
-     * @param decorator
-     */
-    export declare function getDecoratorDefinitionForClass<T extends Function>(target: T, decorator: Function): DecoratorDefinition | undefined;
-
-    /**
-     * 获取指定方法的指定装饰器的定义
-     * @param target
-     * @param name
-     * @param decorator
-     */
-    export declare function getDecoratorDefinitionForMethod<T extends Function>(target: T, name: string, decorator: Function): DecoratorDefinition | undefined;
-
-    /**
-     * 获取指定属性的指定装饰器的定义
-     * @param target
-     * @param name
-     * @param decorator
-     */
-    export declare function getDecoratorDefinitionForProperty<T extends Function>(target: T, name: string, decorator: Function): DecoratorDefinition | undefined;
-
-    /**
-     * 获取指定方法参数的指定装饰器的定义
-     * @param target
-     * @param name
-     * @param index
-     * @param decorator
-     */
-    export declare function getDecoratorDefinitionForMethodParameter<T extends Function>(target: T, name: string, index: number, decorator: Function): DecoratorDefinition | undefined;
-
-    /**
-     * 获取类构造器指定参数的指定装饰器的定义
-     * @param target
-     * @param index
-     * @param decorator
-     */
-    export declare function getDecoratorDefinitionForClassParameter<T extends Function>(target: T, index: number, decorator: Function): DecoratorDefinition | undefined;
-
     declare const global: any;
     (function (this: any, factory: (exporter: <K extends keyof typeof Reflect>(key: K, value: typeof Reflect[K]) => void) => void) {
         const root = typeof global === "object" ? global :
@@ -114,11 +74,6 @@ export namespace Reflect {
         exporter('getParameterDefinitionForClass', ReflectUtil.getParameterDefinitionForClass)
         exporter('getPropertyDefinition', ReflectUtil.getPropertyDefinition)
         exporter('getParameterDefinitionForMethod', ReflectUtil.getParameterDefinitionForMethod)
-        exporter('getDecoratorDefinitionForClass', ReflectUtil.getDecoratorDefinitionForClass)
-        exporter('getDecoratorDefinitionForMethod', ReflectUtil.getDecoratorDefinitionForMethod)
-        exporter('getDecoratorDefinitionForProperty', ReflectUtil.getDecoratorDefinitionForProperty)
-        exporter('getDecoratorDefinitionForMethodParameter', ReflectUtil.getDecoratorDefinitionForMethodParameter)
-        exporter('getDecoratorDefinitionForClassParameter', ReflectUtil.getAnnotationDefinitionForClassParameter)
     });
 }
 
