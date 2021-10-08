@@ -9,7 +9,7 @@ export abstract class DecoratorsPayloadDefinition {
         return this.decorators.some(i => i.type === decorator);
     }
 
-    getDecoratorDefinitions<O, P>(decorator: Annotation<O, P>) {
+    getDecoratorDefinitions<O, P>(decorator: Annotation<O, P>): DecoratorDefinition<typeof decorator, O, P>[] {
         return this.decorators.filter(i => i.type === decorator);
     }
 }
